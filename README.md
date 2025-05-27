@@ -69,6 +69,19 @@ Describe each baseline
 - [ ] [Baseline 2](Link-to-reference)
 
 
+## Results
+
+| LastFM   | FEARec   | BSARec   |
+|----------|----------|----------|
+| HR@5     | 0.0303   | 0.0495   |
+| HR@10    | 0.0413   | 0.0761   |
+| HR@20    | 0.0615   | 0.1055   |
+| NDCG@5   | 0.0204   | 0.0334   |
+| NDCG@10  | 0.0241   | 0.0419   |
+| NDCG@20  | 0.0291   | 0.0491   |
+
+
+
 ### 🧠 High-Level Description of Method
 
 _Explain your approach in simple terms. Describe your model pipeline: data input → embedding/representation → prediction → ranking. Discuss design choices, such as use of embeddings, neural networks, or attention mechanisms._
