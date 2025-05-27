@@ -8,7 +8,7 @@
 
 ## 👥 Supervising TAs
 - Yuanna Liu (Main Supervisor)
-- TA Name 2 (Co-supervisor)
+- Soham (Co-supervisor)
 
 
 ---
