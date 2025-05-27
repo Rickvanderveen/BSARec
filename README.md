@@ -1,4 +1,4 @@
-# 📘 Project Title
+# 📘 An Attentive Inductive Bias for Sequential Recommendation beyond the Self-Attention(BSARec)
 
 
 ## 🧑‍💻 Team Members
@@ -7,7 +7,7 @@
 - Name 3 – email@example.com  
 
 ## 👥 Supervising TAs
-- TA Name 1 (Main Supervisor)
+- Yuanna Liu (Main Supervisor)
 - TA Name 2 (Co-supervisor)
 
 
