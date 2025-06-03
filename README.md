@@ -1,6 +1,19 @@
 # 📘 An Attentive Inductive Bias for Sequential Recommendation beyond the Self-Attention(BSARec)
 
 
+## Results
+
+| LastFM   | FEARec   | BSARec   |
+|----------|----------|----------|
+| HR@5     | 0.0303   | 0.0495   |
+| HR@10    | 0.0413   | 0.0761   |
+| HR@20    | 0.0615   | 0.1055   |
+| NDCG@5   | 0.0204   | 0.0334   |
+| NDCG@10  | 0.0241   | 0.0419   |
+| NDCG@20  | 0.0291   | 0.0491   |
+
+
+
 ## 🧑‍💻 Team Members
 - Name 1 – email@example.com  
 - Name 2 – email@example.com  
@@ -67,18 +80,6 @@ _Describe each baseline, primary methods, and how they are implemented. Mention 
 Describe each baseline
 - [ ] [Baseline 1](Link-to-reference)
 - [ ] [Baseline 2](Link-to-reference)
-
-
-## Results
-
-| LastFM   | FEARec   | BSARec   |
-|----------|----------|----------|
-| HR@5     | 0.0303   | 0.0495   |
-| HR@10    | 0.0413   | 0.0761   |
-| HR@20    | 0.0615   | 0.1055   |
-| NDCG@5   | 0.0204   | 0.0334   |
-| NDCG@10  | 0.0241   | 0.0419   |
-| NDCG@20  | 0.0291   | 0.0491   |
 
 
 
