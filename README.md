@@ -18,8 +18,8 @@
 - trainers.py: This file also needs to be changed to generate predictions. Below logic needs to  be added during eval/inference mode:
             scores, result_info = self.get_full_sort_score(epoch, answer_list, pred_list)
             return scores, result_info, pred_list
-- beyond_accuracy_compute.ipynb: This notebook contains the logic to compute Entropy. Initally we need to map the predicted artists to genres and then compute top-K entropy.K is 6 in the notebook. It also contains the logic to map the artists to generes,ie- in the raw dataset, one artist can be mapped to multiple genres, but we only choose the one with the highest frequency.
-   
+- beyond_accuracy_compute.ipynb: This notebook contains the logic to compute Entropy. Initally we need to map the predicted artists to genres and then compute top-K entropy.K is 6 in the notebook. It also contains the logic to map the artists to generes,ie- in the raw dataset, one artist can be mapped to multiple genres, but we only choose the one with the highest frequency. However, if the genre with the highest frequency is "Other", then we map the artist to the genre with the second highest frequency if present.
+- artist_category_mapping.dat: Each artist id can have multiple genres/categories out of which we choose the majority one; artist_category is the final genre assigned to this artist.
 ## Results
 
 | LastFM   | FEARec   | BSARec   |
