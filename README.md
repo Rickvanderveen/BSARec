@@ -12,7 +12,7 @@
 | NDCG@10  | 0.0241   | 0.0419   |
 | NDCG@20  | 0.0291   | 0.0491   |
 
-
+Average Entropy for Top-6 recommendations: 1.2449553407956822
 
 ## 🧑‍💻 Team Members
 - Name 1 – email@example.com  
