@@ -1,6 +1,25 @@
 # 📘 An Attentive Inductive Bias for Sequential Recommendation beyond the Self-Attention(BSARec)
 
-
+# Description of the files:
+- BSARec_LastFM_predictions.txt: This file contains the predictions from BSARec on LastFM. Each row correponds to a user and its list of recommended artist_ids/item_ids from BSARec
+- data_maps.pkl: This is a dictionary which stores the 4 different maps to convert the ids from raw dataset to processed dataset and vice-versa for LastFM:
+  'user2id': This map converts the user id from raw dataset to a new id in the processed data,
+  'item2id': This map converts the item/artist id from raw dataset to a new id in the processed data,
+  'id2user': This map is the reverse of user2id,ie- it converts the user id in the processed data to the user id in the raw/original data
+  'id2item': This map is the reverse of item2id,ie- it converts the item/artist id in the processed data to the item/artist id in the raw/original data
+- data_process.py: This is the process file that contains the logic to convert the raw LastFM dataset to a processed version as found in the repo for BSARec.
+- main.py: This is the main file to reproduce BSARec. It contains the logic to train/test the model. In order to generate and save the predictions file, we need to add the below logic during testing/inference mode:
+            scores, result_info, predictions = trainer.test(0)
+            # Save predictions to file
+            pred_path = os.path.join("/home/scur0992/BSARec/BSARec/output", "BSARec_LastFM" + '_predictions.txt')
+            with open(pred_path, 'w') as f:
+                for idx, pred in enumerate(predictions):
+                    f.write(f"User {idx}: {pred.tolist()}\n")
+- trainers.py: This file also needs to be changed to generate predictions. Below logic needs to  be added during eval/inference mode:
+            scores, result_info = self.get_full_sort_score(epoch, answer_list, pred_list)
+            return scores, result_info, pred_list
+- beyond_accuracy_compute.ipynb: This notebook contains the logic to compute Entropy. Initally we need to map the predicted artists to genres and then compute top-K entropy.K is 6 in the notebook. It also contains the logic to map the artists to generes,ie- in the raw dataset, one artist can be mapped to multiple genres, but we only choose the one with the highest frequency.
+   
 ## Results
 
 | LastFM   | FEARec   | BSARec   |
