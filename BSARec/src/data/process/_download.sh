@@ -7,12 +7,12 @@ cd raw
 
 if [ "$DATASET_NAME" = "all" ]; then
     cd ..
-    sh _download.sh Beauty            
-    sh _download.sh Sports_and_Outdoors            
-    sh _download.sh Toys_and_Games            
-    sh _download.sh LastFM            
-    sh _download.sh ML-1M 
-    sh _download.sh Yelp           
+    sh _download.sh Beauty
+    sh _download.sh Sports_and_Outdoors
+    sh _download.sh Toys_and_Games
+    sh _download.sh LastFM
+    sh _download.sh ML-1M
+    sh _download.sh Yelp
 
 elif [ "$DATASET_NAME" = "Beauty" ]; then
     wget https://snap.stanford.edu/data/amazon/productGraph/categoryFiles/reviews_Beauty_5.json.gz -O Beauty.json.gz
@@ -46,11 +46,13 @@ elif [ "$DATASET_NAME" = "Yelp" ]; then
     tar -xf ./Yelp/yelp_dataset.tar -C Yelp
     rm ./Yelp/yelp_dataset.tar
 
+elif [ "$DATASET_NAME" = "Diginetica" ]; then
+    mkdir -p Diginetica
+    wget https://raw.githubusercontent.com/RecoHut-Datasets/diginetica/refs/heads/main/train-item-views.csv -O Diginetica/diginetica_train.csv
 
-else   
+else
     echo "Invalid dataset name"
     echo "Available datasets: ['Beauty', 'Sports_and_Outdoors', 'Toys_and_Games', 'LastFM', 'ML-1M', 'Yelp']" # TODO: Yelp
     echo "To download all datasets at once, enter 'all' as the dataset name."
     echo ""
 fi
-

@@ -122,6 +122,25 @@ def LastFM():
     return datas
 
 
+def Diginetica():
+    datas = []
+    data_file = dutils.RAW_DATA_DIR / "Diginetica" / "diginetica_train.csv"
+    df = pd.read_csv(data_file, delimiter=";", header=0, names=["userId", "itemId", "timeframe", "eventdate"])
+
+    # Drop all users which are nan
+    df = df.dropna(subset=["userId", "itemId", "timeframe", "eventdate"])
+
+    for i in tqdm.tqdm(range(len(df))):
+        user, item, timeframe, eventdate = df.iloc[i]
+        # Eventdata is in the format "YYYY-MM-DD", timeframe is in miliseconds.
+        eventdate = datetime.datetime.strptime(eventdate, "%Y-%m-%d")
+        timestamp = int(eventdate.timestamp() * 1000) + int(timeframe)
+
+        datas.append((int(user), int(item), timestamp))
+
+    return datas
+
+
 def process(data_name="Beauty"):
     np.random.seed(12345)
     rating_score = 0.0  # rating score smaller than this score would be deleted
@@ -139,6 +158,8 @@ def process(data_name="Beauty"):
         datas = ML1M()
     elif data_name == "LastFM":
         datas = LastFM()
+    elif data_name == "Diginetica":
+        datas = Diginetica()
 
     user_items, time_interval = dutils.get_interaction(datas, data_name)
     print(f"{data_name} Raw data has been processed!")
@@ -201,9 +222,10 @@ if __name__ == "__main__":
         "Beauty",
         "Sports_and_Outdoors",
         "Toys_and_Games",
+        "Yelp",
         "LastFM",
         "ML-1M",
-        "Yelp",
+        'Diginetica'
     ]
     if dataname == "all":
         for name in available_datasets:
