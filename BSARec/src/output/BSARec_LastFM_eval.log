@@ -1,5 +1,5 @@
-2025-06-09 21:32:43,971 - Namespace(data_dir='data/self_processed/', output_dir='output/', data_name='LastFM', do_eval=True, load_model='BSARec_LastFM', train_name='Jun-09-2025_21-32-43', num_items=10, num_users=1091, lr=0.001, batch_size=256, epochs=200, no_cuda=False, log_freq=1, patience=10, num_workers=4, seed=42, weight_decay=0.0, adam_beta1=0.9, adam_beta2=0.999, gpu_id='0', variance=5, model_type='BSARec', max_seq_length=50, hidden_size=64, num_hidden_layers=2, hidden_act='gelu', num_attention_heads=1, attention_probs_dropout_prob=0.5, hidden_dropout_prob=0.5, initializer_range=0.02, c=5, alpha=0.7, cuda_condition=True, data_file='data/self_processed/LastFM.txt', item_size=3647, checkpoint_path='output/Jun-09-2025_21-32-43.pt', same_target_path='data/self_processed/LastFM_same_target.npy')
-2025-06-09 21:32:43,983 - BSARecModel(
+2025-06-12 22:20:42,696 - Namespace(data_dir='data/', output_dir='output/', data_name='LastFM', do_eval=True, load_model='BSARec_LastFM', train_name='Jun-12-2025_22-20-42', num_items=10, num_users=1091, lr=0.001, batch_size=256, epochs=200, no_cuda=False, log_freq=1, patience=10, num_workers=4, seed=42, weight_decay=0.0, adam_beta1=0.9, adam_beta2=0.999, gpu_id='0', variance=5, model_type='BSARec', max_seq_length=50, hidden_size=64, num_hidden_layers=2, hidden_act='gelu', num_attention_heads=1, attention_probs_dropout_prob=0.5, hidden_dropout_prob=0.5, initializer_range=0.02, c=3, alpha=0.9, cuda_condition=True, data_file='data/LastFM.txt', item_size=3647, checkpoint_path='output/Jun-12-2025_22-20-42.pt', same_target_path='data/LastFM_same_target.npy')
+2025-06-12 22:20:42,707 - BSARecModel(
   (item_embeddings): Embedding(3647, 64, padding_idx=0)
   (position_embeddings): Embedding(50, 64)
   (LayerNorm): LayerNorm()
@@ -57,145 +57,11 @@
     )
   )
 )
-2025-06-09 21:32:45,784 - Total Parameters: 337088
-2025-06-09 21:32:45,811 - odict_keys(['item_embeddings.weight', 'position_embeddings.weight', 'LayerNorm.weight', 'LayerNorm.bias', 'item_encoder.blocks.0.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.0.layer.attention_layer.query.weight', 'item_encoder.blocks.0.layer.attention_layer.query.bias', 'item_encoder.blocks.0.layer.attention_layer.key.weight', 'item_encoder.blocks.0.layer.attention_layer.key.bias', 'item_encoder.blocks.0.layer.attention_layer.value.weight', 'item_encoder.blocks.0.layer.attention_layer.value.bias', 'item_encoder.blocks.0.layer.attention_layer.dense.weight', 'item_encoder.blocks.0.layer.attention_layer.dense.bias', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.0.feed_forward.dense_1.weight', 'item_encoder.blocks.0.feed_forward.dense_1.bias', 'item_encoder.blocks.0.feed_forward.dense_2.weight', 'item_encoder.blocks.0.feed_forward.dense_2.bias', 'item_encoder.blocks.0.feed_forward.LayerNorm.weight', 'item_encoder.blocks.0.feed_forward.LayerNorm.bias', 'item_encoder.blocks.1.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.1.layer.attention_layer.query.weight', 'item_encoder.blocks.1.layer.attention_layer.query.bias', 'item_encoder.blocks.1.layer.attention_layer.key.weight', 'item_encoder.blocks.1.layer.attention_layer.key.bias', 'item_encoder.blocks.1.layer.attention_layer.value.weight', 'item_encoder.blocks.1.layer.attention_layer.value.bias', 'item_encoder.blocks.1.layer.attention_layer.dense.weight', 'item_encoder.blocks.1.layer.attention_layer.dense.bias', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.1.feed_forward.dense_1.weight', 'item_encoder.blocks.1.feed_forward.dense_1.bias', 'item_encoder.blocks.1.feed_forward.dense_2.weight', 'item_encoder.blocks.1.feed_forward.dense_2.bias', 'item_encoder.blocks.1.feed_forward.LayerNorm.weight', 'item_encoder.blocks.1.feed_forward.LayerNorm.bias'])
-2025-06-09 21:32:45,815 - odict_keys(['item_embeddings.weight', 'position_embeddings.weight', 'LayerNorm.weight', 'LayerNorm.bias', 'item_encoder.blocks.0.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.0.layer.attention_layer.query.weight', 'item_encoder.blocks.0.layer.attention_layer.query.bias', 'item_encoder.blocks.0.layer.attention_layer.key.weight', 'item_encoder.blocks.0.layer.attention_layer.key.bias', 'item_encoder.blocks.0.layer.attention_layer.value.weight', 'item_encoder.blocks.0.layer.attention_layer.value.bias', 'item_encoder.blocks.0.layer.attention_layer.dense.weight', 'item_encoder.blocks.0.layer.attention_layer.dense.bias', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.0.feed_forward.dense_1.weight', 'item_encoder.blocks.0.feed_forward.dense_1.bias', 'item_encoder.blocks.0.feed_forward.dense_2.weight', 'item_encoder.blocks.0.feed_forward.dense_2.bias', 'item_encoder.blocks.0.feed_forward.LayerNorm.weight', 'item_encoder.blocks.0.feed_forward.LayerNorm.bias', 'item_encoder.blocks.1.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.1.layer.attention_layer.query.weight', 'item_encoder.blocks.1.layer.attention_layer.query.bias', 'item_encoder.blocks.1.layer.attention_layer.key.weight', 'item_encoder.blocks.1.layer.attention_layer.key.bias', 'item_encoder.blocks.1.layer.attention_layer.value.weight', 'item_encoder.blocks.1.layer.attention_layer.value.bias', 'item_encoder.blocks.1.layer.attention_layer.dense.weight', 'item_encoder.blocks.1.layer.attention_layer.dense.bias', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.1.feed_forward.dense_1.weight', 'item_encoder.blocks.1.feed_forward.dense_1.bias', 'item_encoder.blocks.1.feed_forward.dense_2.weight', 'item_encoder.blocks.1.feed_forward.dense_2.bias', 'item_encoder.blocks.1.feed_forward.LayerNorm.weight', 'item_encoder.blocks.1.feed_forward.LayerNorm.bias'])
-2025-06-09 21:32:45,817 - Load model from output/BSARec_LastFM.pt for test!
-2025-06-09 21:32:46,651 - {'Epoch': 0, 'HR@5': '0.0486', 'NDCG@5': '0.0338', 'HR@10': '0.0661', 'NDCG@10': '0.0395', 'HR@20': '0.1000', 'NDCG@20': '0.0479'}
-2025-06-09 21:32:46,669 - Saved predictions in `output/predictions/BSARec_LastFM_predictions.csv`
-2025-06-09 21:32:46,669 - Jun-09-2025_21-32-43
-2025-06-09 21:32:46,669 - {'Epoch': 0, 'HR@5': '0.0486', 'NDCG@5': '0.0338', 'HR@10': '0.0661', 'NDCG@10': '0.0395', 'HR@20': '0.1000', 'NDCG@20': '0.0479'}
-2025-06-09 21:33:27,059 - Namespace(data_dir='data/self_processed/', output_dir='output/', data_name='LastFM', do_eval=True, load_model='BSARec_LastFM', train_name='Jun-09-2025_21-33-26', num_items=10, num_users=1091, lr=0.001, batch_size=256, epochs=200, no_cuda=False, log_freq=1, patience=10, num_workers=4, seed=42, weight_decay=0.0, adam_beta1=0.9, adam_beta2=0.999, gpu_id='0', variance=5, model_type='BSARec', max_seq_length=50, hidden_size=64, num_hidden_layers=2, hidden_act='gelu', num_attention_heads=1, attention_probs_dropout_prob=0.5, hidden_dropout_prob=0.5, initializer_range=0.02, c=5, alpha=0.7, cuda_condition=True, data_file='data/self_processed/LastFM.txt', item_size=3647, checkpoint_path='output/Jun-09-2025_21-33-26.pt', same_target_path='data/self_processed/LastFM_same_target.npy')
-2025-06-09 21:33:27,071 - BSARecModel(
-  (item_embeddings): Embedding(3647, 64, padding_idx=0)
-  (position_embeddings): Embedding(50, 64)
-  (LayerNorm): LayerNorm()
-  (dropout): Dropout(p=0.5, inplace=False)
-  (item_encoder): BSARecEncoder(
-    (blocks): ModuleList(
-      (0): BSARecBlock(
-        (layer): BSARecLayer(
-          (filter_layer): FrequencyLayer(
-            (out_dropout): Dropout(p=0.5, inplace=False)
-            (LayerNorm): LayerNorm()
-          )
-          (attention_layer): MultiHeadAttention(
-            (query): Linear(in_features=64, out_features=64, bias=True)
-            (key): Linear(in_features=64, out_features=64, bias=True)
-            (value): Linear(in_features=64, out_features=64, bias=True)
-            (softmax): Softmax(dim=-1)
-            (attn_dropout): Dropout(p=0.5, inplace=False)
-            (dense): Linear(in_features=64, out_features=64, bias=True)
-            (LayerNorm): LayerNorm((64,), eps=1e-12, elementwise_affine=True)
-            (out_dropout): Dropout(p=0.5, inplace=False)
-          )
-        )
-        (feed_forward): FeedForward(
-          (dense_1): Linear(in_features=64, out_features=256, bias=True)
-          (dense_2): Linear(in_features=256, out_features=64, bias=True)
-          (LayerNorm): LayerNorm()
-          (dropout): Dropout(p=0.5, inplace=False)
-        )
-      )
-      (1): BSARecBlock(
-        (layer): BSARecLayer(
-          (filter_layer): FrequencyLayer(
-            (out_dropout): Dropout(p=0.5, inplace=False)
-            (LayerNorm): LayerNorm()
-          )
-          (attention_layer): MultiHeadAttention(
-            (query): Linear(in_features=64, out_features=64, bias=True)
-            (key): Linear(in_features=64, out_features=64, bias=True)
-            (value): Linear(in_features=64, out_features=64, bias=True)
-            (softmax): Softmax(dim=-1)
-            (attn_dropout): Dropout(p=0.5, inplace=False)
-            (dense): Linear(in_features=64, out_features=64, bias=True)
-            (LayerNorm): LayerNorm((64,), eps=1e-12, elementwise_affine=True)
-            (out_dropout): Dropout(p=0.5, inplace=False)
-          )
-        )
-        (feed_forward): FeedForward(
-          (dense_1): Linear(in_features=64, out_features=256, bias=True)
-          (dense_2): Linear(in_features=256, out_features=64, bias=True)
-          (LayerNorm): LayerNorm()
-          (dropout): Dropout(p=0.5, inplace=False)
-        )
-      )
-    )
-  )
-)
-2025-06-09 21:33:28,789 - Total Parameters: 337088
-2025-06-09 21:33:28,818 - odict_keys(['item_embeddings.weight', 'position_embeddings.weight', 'LayerNorm.weight', 'LayerNorm.bias', 'item_encoder.blocks.0.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.0.layer.attention_layer.query.weight', 'item_encoder.blocks.0.layer.attention_layer.query.bias', 'item_encoder.blocks.0.layer.attention_layer.key.weight', 'item_encoder.blocks.0.layer.attention_layer.key.bias', 'item_encoder.blocks.0.layer.attention_layer.value.weight', 'item_encoder.blocks.0.layer.attention_layer.value.bias', 'item_encoder.blocks.0.layer.attention_layer.dense.weight', 'item_encoder.blocks.0.layer.attention_layer.dense.bias', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.0.feed_forward.dense_1.weight', 'item_encoder.blocks.0.feed_forward.dense_1.bias', 'item_encoder.blocks.0.feed_forward.dense_2.weight', 'item_encoder.blocks.0.feed_forward.dense_2.bias', 'item_encoder.blocks.0.feed_forward.LayerNorm.weight', 'item_encoder.blocks.0.feed_forward.LayerNorm.bias', 'item_encoder.blocks.1.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.1.layer.attention_layer.query.weight', 'item_encoder.blocks.1.layer.attention_layer.query.bias', 'item_encoder.blocks.1.layer.attention_layer.key.weight', 'item_encoder.blocks.1.layer.attention_layer.key.bias', 'item_encoder.blocks.1.layer.attention_layer.value.weight', 'item_encoder.blocks.1.layer.attention_layer.value.bias', 'item_encoder.blocks.1.layer.attention_layer.dense.weight', 'item_encoder.blocks.1.layer.attention_layer.dense.bias', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.1.feed_forward.dense_1.weight', 'item_encoder.blocks.1.feed_forward.dense_1.bias', 'item_encoder.blocks.1.feed_forward.dense_2.weight', 'item_encoder.blocks.1.feed_forward.dense_2.bias', 'item_encoder.blocks.1.feed_forward.LayerNorm.weight', 'item_encoder.blocks.1.feed_forward.LayerNorm.bias'])
-2025-06-09 21:33:28,824 - odict_keys(['item_embeddings.weight', 'position_embeddings.weight', 'LayerNorm.weight', 'LayerNorm.bias', 'item_encoder.blocks.0.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.0.layer.attention_layer.query.weight', 'item_encoder.blocks.0.layer.attention_layer.query.bias', 'item_encoder.blocks.0.layer.attention_layer.key.weight', 'item_encoder.blocks.0.layer.attention_layer.key.bias', 'item_encoder.blocks.0.layer.attention_layer.value.weight', 'item_encoder.blocks.0.layer.attention_layer.value.bias', 'item_encoder.blocks.0.layer.attention_layer.dense.weight', 'item_encoder.blocks.0.layer.attention_layer.dense.bias', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.0.feed_forward.dense_1.weight', 'item_encoder.blocks.0.feed_forward.dense_1.bias', 'item_encoder.blocks.0.feed_forward.dense_2.weight', 'item_encoder.blocks.0.feed_forward.dense_2.bias', 'item_encoder.blocks.0.feed_forward.LayerNorm.weight', 'item_encoder.blocks.0.feed_forward.LayerNorm.bias', 'item_encoder.blocks.1.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.1.layer.attention_layer.query.weight', 'item_encoder.blocks.1.layer.attention_layer.query.bias', 'item_encoder.blocks.1.layer.attention_layer.key.weight', 'item_encoder.blocks.1.layer.attention_layer.key.bias', 'item_encoder.blocks.1.layer.attention_layer.value.weight', 'item_encoder.blocks.1.layer.attention_layer.value.bias', 'item_encoder.blocks.1.layer.attention_layer.dense.weight', 'item_encoder.blocks.1.layer.attention_layer.dense.bias', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.1.feed_forward.dense_1.weight', 'item_encoder.blocks.1.feed_forward.dense_1.bias', 'item_encoder.blocks.1.feed_forward.dense_2.weight', 'item_encoder.blocks.1.feed_forward.dense_2.bias', 'item_encoder.blocks.1.feed_forward.LayerNorm.weight', 'item_encoder.blocks.1.feed_forward.LayerNorm.bias'])
-2025-06-09 21:33:28,826 - Load model from output/BSARec_LastFM.pt for test!
-2025-06-09 21:33:29,628 - {'Epoch': 0, 'HR@5': '0.0486', 'NDCG@5': '0.0338', 'HR@10': '0.0661', 'NDCG@10': '0.0395', 'HR@20': '0.1000', 'NDCG@20': '0.0479'}
-2025-06-09 21:33:29,645 - Saved predictions in `output/predictions/BSARec_LastFM_predictions.csv`
-2025-06-09 21:33:29,646 - Jun-09-2025_21-33-26
-2025-06-09 21:33:29,646 - {'Epoch': 0, 'HR@5': '0.0486', 'NDCG@5': '0.0338', 'HR@10': '0.0661', 'NDCG@10': '0.0395', 'HR@20': '0.1000', 'NDCG@20': '0.0479'}
-2025-06-11 13:35:07,320 - Namespace(data_dir='data/', output_dir='output/', data_name='LastFM', do_eval=True, load_model='BSARec_LastFM', train_name='Jun-11-2025_13-35-07', num_items=10, num_users=1091, lr=0.001, batch_size=256, epochs=200, no_cuda=False, log_freq=1, patience=10, num_workers=4, seed=42, weight_decay=0.0, adam_beta1=0.9, adam_beta2=0.999, gpu_id='0', variance=5, model_type='BSARec', max_seq_length=50, hidden_size=64, num_hidden_layers=2, hidden_act='gelu', num_attention_heads=1, attention_probs_dropout_prob=0.5, hidden_dropout_prob=0.5, initializer_range=0.02, c=3, alpha=0.9, cuda_condition=True, data_file='data/LastFM.txt', item_size=3647, checkpoint_path='output/Jun-11-2025_13-35-07.pt', same_target_path='data/LastFM_same_target.npy')
-2025-06-11 13:35:07,332 - BSARecModel(
-  (item_embeddings): Embedding(3647, 64, padding_idx=0)
-  (position_embeddings): Embedding(50, 64)
-  (LayerNorm): LayerNorm()
-  (dropout): Dropout(p=0.5, inplace=False)
-  (item_encoder): BSARecEncoder(
-    (blocks): ModuleList(
-      (0): BSARecBlock(
-        (layer): BSARecLayer(
-          (filter_layer): FrequencyLayer(
-            (out_dropout): Dropout(p=0.5, inplace=False)
-            (LayerNorm): LayerNorm()
-          )
-          (attention_layer): MultiHeadAttention(
-            (query): Linear(in_features=64, out_features=64, bias=True)
-            (key): Linear(in_features=64, out_features=64, bias=True)
-            (value): Linear(in_features=64, out_features=64, bias=True)
-            (softmax): Softmax(dim=-1)
-            (attn_dropout): Dropout(p=0.5, inplace=False)
-            (dense): Linear(in_features=64, out_features=64, bias=True)
-            (LayerNorm): LayerNorm((64,), eps=1e-12, elementwise_affine=True)
-            (out_dropout): Dropout(p=0.5, inplace=False)
-          )
-        )
-        (feed_forward): FeedForward(
-          (dense_1): Linear(in_features=64, out_features=256, bias=True)
-          (dense_2): Linear(in_features=256, out_features=64, bias=True)
-          (LayerNorm): LayerNorm()
-          (dropout): Dropout(p=0.5, inplace=False)
-        )
-      )
-      (1): BSARecBlock(
-        (layer): BSARecLayer(
-          (filter_layer): FrequencyLayer(
-            (out_dropout): Dropout(p=0.5, inplace=False)
-            (LayerNorm): LayerNorm()
-          )
-          (attention_layer): MultiHeadAttention(
-            (query): Linear(in_features=64, out_features=64, bias=True)
-            (key): Linear(in_features=64, out_features=64, bias=True)
-            (value): Linear(in_features=64, out_features=64, bias=True)
-            (softmax): Softmax(dim=-1)
-            (attn_dropout): Dropout(p=0.5, inplace=False)
-            (dense): Linear(in_features=64, out_features=64, bias=True)
-            (LayerNorm): LayerNorm((64,), eps=1e-12, elementwise_affine=True)
-            (out_dropout): Dropout(p=0.5, inplace=False)
-          )
-        )
-        (feed_forward): FeedForward(
-          (dense_1): Linear(in_features=64, out_features=256, bias=True)
-          (dense_2): Linear(in_features=256, out_features=64, bias=True)
-          (LayerNorm): LayerNorm()
-          (dropout): Dropout(p=0.5, inplace=False)
-        )
-      )
-    )
-  )
-)
-2025-06-11 13:35:09,522 - Total Parameters: 337088
-2025-06-11 13:35:09,558 - odict_keys(['item_embeddings.weight', 'position_embeddings.weight', 'LayerNorm.weight', 'LayerNorm.bias', 'item_encoder.blocks.0.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.0.layer.attention_layer.query.weight', 'item_encoder.blocks.0.layer.attention_layer.query.bias', 'item_encoder.blocks.0.layer.attention_layer.key.weight', 'item_encoder.blocks.0.layer.attention_layer.key.bias', 'item_encoder.blocks.0.layer.attention_layer.value.weight', 'item_encoder.blocks.0.layer.attention_layer.value.bias', 'item_encoder.blocks.0.layer.attention_layer.dense.weight', 'item_encoder.blocks.0.layer.attention_layer.dense.bias', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.0.feed_forward.dense_1.weight', 'item_encoder.blocks.0.feed_forward.dense_1.bias', 'item_encoder.blocks.0.feed_forward.dense_2.weight', 'item_encoder.blocks.0.feed_forward.dense_2.bias', 'item_encoder.blocks.0.feed_forward.LayerNorm.weight', 'item_encoder.blocks.0.feed_forward.LayerNorm.bias', 'item_encoder.blocks.1.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.1.layer.attention_layer.query.weight', 'item_encoder.blocks.1.layer.attention_layer.query.bias', 'item_encoder.blocks.1.layer.attention_layer.key.weight', 'item_encoder.blocks.1.layer.attention_layer.key.bias', 'item_encoder.blocks.1.layer.attention_layer.value.weight', 'item_encoder.blocks.1.layer.attention_layer.value.bias', 'item_encoder.blocks.1.layer.attention_layer.dense.weight', 'item_encoder.blocks.1.layer.attention_layer.dense.bias', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.1.feed_forward.dense_1.weight', 'item_encoder.blocks.1.feed_forward.dense_1.bias', 'item_encoder.blocks.1.feed_forward.dense_2.weight', 'item_encoder.blocks.1.feed_forward.dense_2.bias', 'item_encoder.blocks.1.feed_forward.LayerNorm.weight', 'item_encoder.blocks.1.feed_forward.LayerNorm.bias'])
-2025-06-11 13:35:09,564 - odict_keys(['item_embeddings.weight', 'position_embeddings.weight', 'LayerNorm.weight', 'LayerNorm.bias', 'item_encoder.blocks.0.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.0.layer.attention_layer.query.weight', 'item_encoder.blocks.0.layer.attention_layer.query.bias', 'item_encoder.blocks.0.layer.attention_layer.key.weight', 'item_encoder.blocks.0.layer.attention_layer.key.bias', 'item_encoder.blocks.0.layer.attention_layer.value.weight', 'item_encoder.blocks.0.layer.attention_layer.value.bias', 'item_encoder.blocks.0.layer.attention_layer.dense.weight', 'item_encoder.blocks.0.layer.attention_layer.dense.bias', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.0.feed_forward.dense_1.weight', 'item_encoder.blocks.0.feed_forward.dense_1.bias', 'item_encoder.blocks.0.feed_forward.dense_2.weight', 'item_encoder.blocks.0.feed_forward.dense_2.bias', 'item_encoder.blocks.0.feed_forward.LayerNorm.weight', 'item_encoder.blocks.0.feed_forward.LayerNorm.bias', 'item_encoder.blocks.1.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.1.layer.attention_layer.query.weight', 'item_encoder.blocks.1.layer.attention_layer.query.bias', 'item_encoder.blocks.1.layer.attention_layer.key.weight', 'item_encoder.blocks.1.layer.attention_layer.key.bias', 'item_encoder.blocks.1.layer.attention_layer.value.weight', 'item_encoder.blocks.1.layer.attention_layer.value.bias', 'item_encoder.blocks.1.layer.attention_layer.dense.weight', 'item_encoder.blocks.1.layer.attention_layer.dense.bias', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.1.feed_forward.dense_1.weight', 'item_encoder.blocks.1.feed_forward.dense_1.bias', 'item_encoder.blocks.1.feed_forward.dense_2.weight', 'item_encoder.blocks.1.feed_forward.dense_2.bias', 'item_encoder.blocks.1.feed_forward.LayerNorm.weight', 'item_encoder.blocks.1.feed_forward.LayerNorm.bias'])
-2025-06-11 13:35:09,567 - Load model from output/BSARec_LastFM.pt for test!
-2025-06-11 13:35:11,359 - {'Epoch': 0, 'HR@5': '0.0486', 'NDCG@5': '0.0349', 'HR@10': '0.0688', 'NDCG@10': '0.0412', 'HR@20': '0.1028', 'NDCG@20': '0.0500'}
-2025-06-11 13:35:11,387 - Saved predictions in `output/predictions/BSARec_LastFM_predictions.csv`
-2025-06-11 13:35:11,387 - Jun-11-2025_13-35-07
-2025-06-11 13:35:11,387 - {'Epoch': 0, 'HR@5': '0.0486', 'NDCG@5': '0.0349', 'HR@10': '0.0688', 'NDCG@10': '0.0412', 'HR@20': '0.1028', 'NDCG@20': '0.0500'}
+2025-06-12 22:20:44,881 - Total Parameters: 337088
+2025-06-12 22:20:44,917 - odict_keys(['item_embeddings.weight', 'position_embeddings.weight', 'LayerNorm.weight', 'LayerNorm.bias', 'item_encoder.blocks.0.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.0.layer.attention_layer.query.weight', 'item_encoder.blocks.0.layer.attention_layer.query.bias', 'item_encoder.blocks.0.layer.attention_layer.key.weight', 'item_encoder.blocks.0.layer.attention_layer.key.bias', 'item_encoder.blocks.0.layer.attention_layer.value.weight', 'item_encoder.blocks.0.layer.attention_layer.value.bias', 'item_encoder.blocks.0.layer.attention_layer.dense.weight', 'item_encoder.blocks.0.layer.attention_layer.dense.bias', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.0.feed_forward.dense_1.weight', 'item_encoder.blocks.0.feed_forward.dense_1.bias', 'item_encoder.blocks.0.feed_forward.dense_2.weight', 'item_encoder.blocks.0.feed_forward.dense_2.bias', 'item_encoder.blocks.0.feed_forward.LayerNorm.weight', 'item_encoder.blocks.0.feed_forward.LayerNorm.bias', 'item_encoder.blocks.1.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.1.layer.attention_layer.query.weight', 'item_encoder.blocks.1.layer.attention_layer.query.bias', 'item_encoder.blocks.1.layer.attention_layer.key.weight', 'item_encoder.blocks.1.layer.attention_layer.key.bias', 'item_encoder.blocks.1.layer.attention_layer.value.weight', 'item_encoder.blocks.1.layer.attention_layer.value.bias', 'item_encoder.blocks.1.layer.attention_layer.dense.weight', 'item_encoder.blocks.1.layer.attention_layer.dense.bias', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.1.feed_forward.dense_1.weight', 'item_encoder.blocks.1.feed_forward.dense_1.bias', 'item_encoder.blocks.1.feed_forward.dense_2.weight', 'item_encoder.blocks.1.feed_forward.dense_2.bias', 'item_encoder.blocks.1.feed_forward.LayerNorm.weight', 'item_encoder.blocks.1.feed_forward.LayerNorm.bias'])
+2025-06-12 22:20:44,924 - odict_keys(['item_embeddings.weight', 'position_embeddings.weight', 'LayerNorm.weight', 'LayerNorm.bias', 'item_encoder.blocks.0.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.0.layer.attention_layer.query.weight', 'item_encoder.blocks.0.layer.attention_layer.query.bias', 'item_encoder.blocks.0.layer.attention_layer.key.weight', 'item_encoder.blocks.0.layer.attention_layer.key.bias', 'item_encoder.blocks.0.layer.attention_layer.value.weight', 'item_encoder.blocks.0.layer.attention_layer.value.bias', 'item_encoder.blocks.0.layer.attention_layer.dense.weight', 'item_encoder.blocks.0.layer.attention_layer.dense.bias', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.0.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.0.feed_forward.dense_1.weight', 'item_encoder.blocks.0.feed_forward.dense_1.bias', 'item_encoder.blocks.0.feed_forward.dense_2.weight', 'item_encoder.blocks.0.feed_forward.dense_2.bias', 'item_encoder.blocks.0.feed_forward.LayerNorm.weight', 'item_encoder.blocks.0.feed_forward.LayerNorm.bias', 'item_encoder.blocks.1.layer.filter_layer.sqrt_beta', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.filter_layer.LayerNorm.bias', 'item_encoder.blocks.1.layer.attention_layer.query.weight', 'item_encoder.blocks.1.layer.attention_layer.query.bias', 'item_encoder.blocks.1.layer.attention_layer.key.weight', 'item_encoder.blocks.1.layer.attention_layer.key.bias', 'item_encoder.blocks.1.layer.attention_layer.value.weight', 'item_encoder.blocks.1.layer.attention_layer.value.bias', 'item_encoder.blocks.1.layer.attention_layer.dense.weight', 'item_encoder.blocks.1.layer.attention_layer.dense.bias', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.weight', 'item_encoder.blocks.1.layer.attention_layer.LayerNorm.bias', 'item_encoder.blocks.1.feed_forward.dense_1.weight', 'item_encoder.blocks.1.feed_forward.dense_1.bias', 'item_encoder.blocks.1.feed_forward.dense_2.weight', 'item_encoder.blocks.1.feed_forward.dense_2.bias', 'item_encoder.blocks.1.feed_forward.LayerNorm.weight', 'item_encoder.blocks.1.feed_forward.LayerNorm.bias'])
+2025-06-12 22:20:44,925 - Load model from output/BSARec_LastFM.pt for test!
+2025-06-12 22:20:46,482 - {'Epoch': 0, 'HR@5': '0.0532', 'NDCG@5': '0.0352', 'HR@10': '0.0771', 'NDCG@10': '0.0429', 'HR@20': '0.1064', 'NDCG@20': '0.0501'}
+2025-06-12 22:20:46,508 - Saved predictions in `output/predictions/BSARec_LastFM_predictions.csv`
+2025-06-12 22:20:46,508 - Jun-12-2025_22-20-42
+2025-06-12 22:20:46,508 - {'Epoch': 0, 'HR@5': '0.0532', 'NDCG@5': '0.0352', 'HR@10': '0.0771', 'NDCG@10': '0.0429', 'HR@20': '0.1064', 'NDCG@20': '0.0501'}

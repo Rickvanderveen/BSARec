@@ -22,6 +22,7 @@ python main.py \
   --lr 0.001 \
   --num_attention_heads 4 \
   --train_name FEARec_LastFM \
+  --model_type FEARec \
   --data_dir data/
 
 # Evaluate which also saves the predictions
@@ -29,5 +30,6 @@ python main.py \
   --data_name LastFM \
   --num_attention_heads 4 \
   --load_model FEARec_LastFM \
+  --model_type FEARec \
   --do_eval \
   --data_dir data/
