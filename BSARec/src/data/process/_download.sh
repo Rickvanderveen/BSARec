@@ -49,6 +49,7 @@ elif [ "$DATASET_NAME" = "Yelp" ]; then
 elif [ "$DATASET_NAME" = "Diginetica" ]; then
     mkdir -p Diginetica
     wget https://raw.githubusercontent.com/RecoHut-Datasets/diginetica/refs/heads/main/train-item-views.csv -O Diginetica/diginetica_train.csv
+    wget https://raw.githubusercontent.com/RecoHut-Datasets/diginetica/refs/heads/main/product-categories.csv -O Diginetica/product_categories.csv
 
 else
     echo "Invalid dataset name"

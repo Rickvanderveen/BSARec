@@ -1,9 +1,9 @@
 import argparse
 
-from category import lastfm, ml1m
+from category import diginetica, lastfm, ml1m
 
 
-CATEGORY_DATASET_CHOICES = ["LastFM", "ML-1M"]
+CATEGORY_DATASET_CHOICES = ["Diginetica", "LastFM", "ML-1M"]
 
 
 def parse_args():
@@ -32,6 +32,8 @@ def main():
     args = parse_args()
 
     if args.all:
+        print("Create Diginetica product-category mapping")
+        diginetica.create_product_category_mapping()
         print("Create LastFM artist-genre mapping")
         lastfm.create_artist_genre_mapping()
         print("Create ML-1M movie-category mapping")
@@ -41,7 +43,9 @@ def main():
 
     print(f"Creating category map for dataset: {args.dataset}")
     dataset = args.dataset.lower()
-    if dataset == "lastfm":
+    if dataset == "diginetica":
+        diginetica.create_product_category_mapping()
+    elif dataset == "lastfm":
         lastfm.create_artist_genre_mapping()
     elif dataset == "ml-1m":
         ml1m.create_movie_category_mapping()
