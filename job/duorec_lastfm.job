@@ -20,7 +20,7 @@ source activate bsarec
 python main.py \
   --data_name LastFM \
   --lr 0.001 \
-  --num_attention_heads 2 \
+  --num_attention_heads 4 \
   --train_name DuoRec_LastFM \
   --model_type DuoRec \
   --data_dir data/
@@ -28,7 +28,7 @@ python main.py \
 # Evaluate which also saves the predictions
 python main.py \
   --data_name LastFM \
-  --num_attention_heads 2 \
+  --num_attention_heads 4 \
   --load_model DuoRec_LastFM \
   --model_type DuoRec \
   --do_eval \

@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_mig
+#SBATCH --job-name=BERT4Rec
+#SBATCH --ntasks=1
+#SBATCH --gpus=1
+#SBATCH --cpus-per-task=9
+#SBATCH --time=01:00:00
+#SBATCH --array=1-18%8
+#SBATCH --output=out/hparams/Bert4Rec_Diginetica_%A-%a.out
+
+module purge
+module load 2023
+module load Anaconda3/2023.07-2
+
+HPARAMS_FILE=$HOME/BSARec/job/bert4rec_hparams.txt
+
+cd $HOME/BSARec/BSARec/src/
+
+source activate bsarec
+
+srun python hyperparameter_search.py \
+  --data_name Diginetica \
+  --data_dir data/self_processed/ \
+  --train_name BERT4Rec_Diginetica \
+  --model_type BERT4Rec \
+  $(head -$SLURM_ARRAY_TASK_ID $HPARAMS_FILE | tail -1)

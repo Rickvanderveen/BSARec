@@ -41,7 +41,7 @@ class RecDataset(Dataset):
             else:
                 print("Start making same_target_index for contrastive learning")
                 self.same_target_index = self.get_same_target_index()
-                self.same_target_index = np.array(self.same_target_index)
+                self.same_target_index = np.array(self.same_target_index, dtype="object")
                 np.save(args.same_target_path, self.same_target_index)
 
     def get_same_target_index(self):

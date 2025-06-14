@@ -1,0 +1,87 @@
+2025-06-13 20:21:30,598 - Namespace(data_dir='./data/', output_dir='hparam_search/', data_name='LastFM', train_name='FEARec_LastFM', num_items=10, num_users=1091, lr=0.001, batch_size=256, epochs=200, no_cuda=False, log_freq=1, patience=10, num_workers=4, seed=42, weight_decay=0.0, adam_beta1=0.9, adam_beta2=0.999, gpu_id='0', variance=5, model_type='FEARec', max_seq_length=50, hidden_size=64, num_hidden_layers=2, hidden_act='gelu', num_attention_heads=2, attention_probs_dropout_prob=0.5, hidden_dropout_prob=0.5, initializer_range=0.02, tau=1.0, lmd=0.1, lmd_sem=0.1, ssl='us_x', sim='dot', spatial_ratio=0.1, global_ratio=0.6, fredom_type='us_x', fredom='True', cuda_condition=True, data_file='./data/LastFM.txt', item_size=3647, checkpoint_path=PosixPath('/gpfs/home3/scur2771/BSARec/BSARec/src/hparam_search/FEARec_LastFM/12364666_2/model.pt'), same_target_path='./data/LastFM_same_target.npy')
+2025-06-13 20:21:30,611 - FEARecModel(
+  (item_embeddings): Embedding(3647, 64, padding_idx=0)
+  (position_embeddings): Embedding(50, 64)
+  (LayerNorm): LayerNorm()
+  (dropout): Dropout(p=0.5, inplace=False)
+  (item_encoder): FEARecEncoder(
+    (blocks): ModuleList(
+      (0): FEARecBlock(
+        (layer): FEARecLayer(
+          (dropout): Dropout(p=0.1, inplace=False)
+          (attn_dropout): Dropout(p=0.5, inplace=False)
+          (LayerNorm): LayerNorm()
+          (out_dropout): Dropout(p=0.5, inplace=False)
+          (dense): Linear(in_features=64, out_features=64, bias=True)
+          (query): Linear(in_features=64, out_features=64, bias=True)
+          (key): Linear(in_features=64, out_features=64, bias=True)
+          (value): Linear(in_features=64, out_features=64, bias=True)
+        )
+        (feed_forward): FeedForward(
+          (dense_1): Linear(in_features=64, out_features=256, bias=True)
+          (dense_2): Linear(in_features=256, out_features=64, bias=True)
+          (LayerNorm): LayerNorm()
+          (dropout): Dropout(p=0.5, inplace=False)
+        )
+      )
+      (1): FEARecBlock(
+        (layer): FEARecLayer(
+          (dropout): Dropout(p=0.1, inplace=False)
+          (attn_dropout): Dropout(p=0.5, inplace=False)
+          (LayerNorm): LayerNorm()
+          (out_dropout): Dropout(p=0.5, inplace=False)
+          (dense): Linear(in_features=64, out_features=64, bias=True)
+          (query): Linear(in_features=64, out_features=64, bias=True)
+          (key): Linear(in_features=64, out_features=64, bias=True)
+          (value): Linear(in_features=64, out_features=64, bias=True)
+        )
+        (feed_forward): FeedForward(
+          (dense_1): Linear(in_features=64, out_features=256, bias=True)
+          (dense_2): Linear(in_features=256, out_features=64, bias=True)
+          (LayerNorm): LayerNorm()
+          (dropout): Dropout(p=0.5, inplace=False)
+        )
+      )
+    )
+  )
+  (aug_nce_fct): CrossEntropyLoss()
+)
+2025-06-13 20:21:33,368 - Total Parameters: 336704
+2025-06-13 20:21:58,106 - {'epoch': 0, 'rec_loss': '8.9158'}
+2025-06-13 20:21:58,990 - {'Epoch': 0, 'HR@5': '0.0257', 'NDCG@5': '0.0167', 'HR@10': '0.0459', 'NDCG@10': '0.0230', 'HR@20': '0.0633', 'NDCG@20': '0.0273'}
+2025-06-13 20:21:58,992 - Validation score increased.  Saving model ...
+2025-06-13 20:22:22,319 - {'epoch': 1, 'rec_loss': '8.5610'}
+2025-06-13 20:22:23,213 - {'Epoch': 1, 'HR@5': '0.0229', 'NDCG@5': '0.0135', 'HR@10': '0.0385', 'NDCG@10': '0.0185', 'HR@20': '0.0578', 'NDCG@20': '0.0234'}
+2025-06-13 20:22:23,215 - EarlyStopping counter: 1 out of 10
+2025-06-13 20:22:46,551 - {'epoch': 2, 'rec_loss': '8.5113'}
+2025-06-13 20:22:47,482 - {'Epoch': 2, 'HR@5': '0.0202', 'NDCG@5': '0.0147', 'HR@10': '0.0349', 'NDCG@10': '0.0195', 'HR@20': '0.0633', 'NDCG@20': '0.0267'}
+2025-06-13 20:22:47,484 - EarlyStopping counter: 2 out of 10
+2025-06-13 20:23:10,860 - {'epoch': 3, 'rec_loss': '8.4861'}
+2025-06-13 20:23:11,697 - {'Epoch': 3, 'HR@5': '0.0211', 'NDCG@5': '0.0131', 'HR@10': '0.0385', 'NDCG@10': '0.0187', 'HR@20': '0.0651', 'NDCG@20': '0.0252'}
+2025-06-13 20:23:11,700 - EarlyStopping counter: 3 out of 10
+2025-06-13 20:23:35,041 - {'epoch': 4, 'rec_loss': '8.4667'}
+2025-06-13 20:23:35,898 - {'Epoch': 4, 'HR@5': '0.0193', 'NDCG@5': '0.0131', 'HR@10': '0.0312', 'NDCG@10': '0.0171', 'HR@20': '0.0642', 'NDCG@20': '0.0254'}
+2025-06-13 20:23:35,900 - EarlyStopping counter: 4 out of 10
+2025-06-13 20:23:59,322 - {'epoch': 5, 'rec_loss': '8.4518'}
+2025-06-13 20:24:00,184 - {'Epoch': 5, 'HR@5': '0.0211', 'NDCG@5': '0.0136', 'HR@10': '0.0376', 'NDCG@10': '0.0190', 'HR@20': '0.0624', 'NDCG@20': '0.0251'}
+2025-06-13 20:24:00,186 - EarlyStopping counter: 5 out of 10
+2025-06-13 20:24:23,630 - {'epoch': 6, 'rec_loss': '8.4278'}
+2025-06-13 20:24:24,542 - {'Epoch': 6, 'HR@5': '0.0193', 'NDCG@5': '0.0131', 'HR@10': '0.0358', 'NDCG@10': '0.0183', 'HR@20': '0.0633', 'NDCG@20': '0.0252'}
+2025-06-13 20:24:24,545 - EarlyStopping counter: 6 out of 10
+2025-06-13 20:24:47,910 - {'epoch': 7, 'rec_loss': '8.3713'}
+2025-06-13 20:24:48,782 - {'Epoch': 7, 'HR@5': '0.0239', 'NDCG@5': '0.0160', 'HR@10': '0.0385', 'NDCG@10': '0.0207', 'HR@20': '0.0642', 'NDCG@20': '0.0271'}
+2025-06-13 20:24:48,784 - EarlyStopping counter: 7 out of 10
+2025-06-13 20:25:12,293 - {'epoch': 8, 'rec_loss': '8.3139'}
+2025-06-13 20:25:13,130 - {'Epoch': 8, 'HR@5': '0.0229', 'NDCG@5': '0.0131', 'HR@10': '0.0404', 'NDCG@10': '0.0186', 'HR@20': '0.0624', 'NDCG@20': '0.0241'}
+2025-06-13 20:25:13,132 - EarlyStopping counter: 8 out of 10
+2025-06-13 20:25:36,665 - {'epoch': 9, 'rec_loss': '8.2593'}
+2025-06-13 20:25:37,525 - {'Epoch': 9, 'HR@5': '0.0257', 'NDCG@5': '0.0155', 'HR@10': '0.0413', 'NDCG@10': '0.0204', 'HR@20': '0.0624', 'NDCG@20': '0.0256'}
+2025-06-13 20:25:37,527 - EarlyStopping counter: 9 out of 10
+2025-06-13 20:26:00,912 - {'epoch': 10, 'rec_loss': '8.2042'}
+2025-06-13 20:26:01,760 - {'Epoch': 10, 'HR@5': '0.0229', 'NDCG@5': '0.0144', 'HR@10': '0.0413', 'NDCG@10': '0.0205', 'HR@20': '0.0633', 'NDCG@20': '0.0261'}
+2025-06-13 20:26:01,763 - EarlyStopping counter: 10 out of 10
+2025-06-13 20:26:01,763 - Early stopping
+2025-06-13 20:26:01,763 - ---------------Validation Score---------------
+2025-06-13 20:26:02,607 - {'Epoch': 0, 'HR@5': '0.0257', 'NDCG@5': '0.0167', 'HR@10': '0.0459', 'NDCG@10': '0.0230', 'HR@20': '0.0633', 'NDCG@20': '0.0273'}
+2025-06-13 20:26:02,610 - FEARec_LastFM
+2025-06-13 20:26:02,610 - {'Epoch': 0, 'HR@5': '0.0257', 'NDCG@5': '0.0167', 'HR@10': '0.0459', 'NDCG@10': '0.0230', 'HR@20': '0.0633', 'NDCG@20': '0.0273'}

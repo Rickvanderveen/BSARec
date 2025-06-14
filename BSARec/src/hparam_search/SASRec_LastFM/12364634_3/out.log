@@ -1,0 +1,191 @@
+2025-06-13 20:21:11,015 - Namespace(data_dir='./data/', output_dir='hparam_search/', data_name='LastFM', train_name='SASRec_LastFM', num_items=10, num_users=1091, lr=0.001, batch_size=256, epochs=200, no_cuda=False, log_freq=1, patience=10, num_workers=4, seed=42, weight_decay=0.0, adam_beta1=0.9, adam_beta2=0.999, gpu_id='0', variance=5, model_type='SASRec', max_seq_length=50, hidden_size=64, num_hidden_layers=2, hidden_act='gelu', num_attention_heads=4, attention_probs_dropout_prob=0.5, hidden_dropout_prob=0.5, initializer_range=0.02, cuda_condition=True, data_file='./data/LastFM.txt', item_size=3647, checkpoint_path=PosixPath('/gpfs/home3/scur2771/BSARec/BSARec/src/hparam_search/SASRec_LastFM/12364634_3/model.pt'), same_target_path='./data/LastFM_same_target.npy')
+2025-06-13 20:21:11,025 - SASRecModel(
+  (item_embeddings): Embedding(3647, 64, padding_idx=0)
+  (position_embeddings): Embedding(50, 64)
+  (LayerNorm): LayerNorm()
+  (dropout): Dropout(p=0.5, inplace=False)
+  (item_encoder): TransformerEncoder(
+    (blocks): ModuleList(
+      (0): TransformerBlock(
+        (layer): MultiHeadAttention(
+          (query): Linear(in_features=64, out_features=64, bias=True)
+          (key): Linear(in_features=64, out_features=64, bias=True)
+          (value): Linear(in_features=64, out_features=64, bias=True)
+          (softmax): Softmax(dim=-1)
+          (attn_dropout): Dropout(p=0.5, inplace=False)
+          (dense): Linear(in_features=64, out_features=64, bias=True)
+          (LayerNorm): LayerNorm((64,), eps=1e-12, elementwise_affine=True)
+          (out_dropout): Dropout(p=0.5, inplace=False)
+        )
+        (feed_forward): FeedForward(
+          (dense_1): Linear(in_features=64, out_features=256, bias=True)
+          (dense_2): Linear(in_features=256, out_features=64, bias=True)
+          (LayerNorm): LayerNorm()
+          (dropout): Dropout(p=0.5, inplace=False)
+        )
+      )
+      (1): TransformerBlock(
+        (layer): MultiHeadAttention(
+          (query): Linear(in_features=64, out_features=64, bias=True)
+          (key): Linear(in_features=64, out_features=64, bias=True)
+          (value): Linear(in_features=64, out_features=64, bias=True)
+          (softmax): Softmax(dim=-1)
+          (attn_dropout): Dropout(p=0.5, inplace=False)
+          (dense): Linear(in_features=64, out_features=64, bias=True)
+          (LayerNorm): LayerNorm((64,), eps=1e-12, elementwise_affine=True)
+          (out_dropout): Dropout(p=0.5, inplace=False)
+        )
+        (feed_forward): FeedForward(
+          (dense_1): Linear(in_features=64, out_features=256, bias=True)
+          (dense_2): Linear(in_features=256, out_features=64, bias=True)
+          (LayerNorm): LayerNorm()
+          (dropout): Dropout(p=0.5, inplace=False)
+        )
+      )
+    )
+  )
+)
+2025-06-13 20:21:13,236 - Total Parameters: 336704
+2025-06-13 20:21:16,203 - {'epoch': 0, 'rec_loss': '1.3358'}
+2025-06-13 20:21:16,907 - {'Epoch': 0, 'HR@5': '0.0202', 'NDCG@5': '0.0121', 'HR@10': '0.0367', 'NDCG@10': '0.0173', 'HR@20': '0.0624', 'NDCG@20': '0.0238'}
+2025-06-13 20:21:16,908 - Validation score increased.  Saving model ...
+2025-06-13 20:21:19,283 - {'epoch': 1, 'rec_loss': '1.2162'}
+2025-06-13 20:21:19,992 - {'Epoch': 1, 'HR@5': '0.0211', 'NDCG@5': '0.0122', 'HR@10': '0.0358', 'NDCG@10': '0.0171', 'HR@20': '0.0569', 'NDCG@20': '0.0224'}
+2025-06-13 20:21:19,992 - EarlyStopping counter: 1 out of 10
+2025-06-13 20:21:22,292 - {'epoch': 2, 'rec_loss': '1.1435'}
+2025-06-13 20:21:23,041 - {'Epoch': 2, 'HR@5': '0.0202', 'NDCG@5': '0.0122', 'HR@10': '0.0367', 'NDCG@10': '0.0176', 'HR@20': '0.0569', 'NDCG@20': '0.0226'}
+2025-06-13 20:21:23,041 - EarlyStopping counter: 2 out of 10
+2025-06-13 20:21:25,384 - {'epoch': 3, 'rec_loss': '1.0838'}
+2025-06-13 20:21:26,107 - {'Epoch': 3, 'HR@5': '0.0266', 'NDCG@5': '0.0163', 'HR@10': '0.0330', 'NDCG@10': '0.0183', 'HR@20': '0.0541', 'NDCG@20': '0.0236'}
+2025-06-13 20:21:26,107 - EarlyStopping counter: 3 out of 10
+2025-06-13 20:21:28,453 - {'epoch': 4, 'rec_loss': '1.0294'}
+2025-06-13 20:21:29,179 - {'Epoch': 4, 'HR@5': '0.0211', 'NDCG@5': '0.0131', 'HR@10': '0.0349', 'NDCG@10': '0.0175', 'HR@20': '0.0550', 'NDCG@20': '0.0225'}
+2025-06-13 20:21:29,180 - EarlyStopping counter: 4 out of 10
+2025-06-13 20:21:31,418 - {'epoch': 5, 'rec_loss': '0.9769'}
+2025-06-13 20:21:32,148 - {'Epoch': 5, 'HR@5': '0.0183', 'NDCG@5': '0.0109', 'HR@10': '0.0367', 'NDCG@10': '0.0167', 'HR@20': '0.0596', 'NDCG@20': '0.0226'}
+2025-06-13 20:21:32,149 - EarlyStopping counter: 5 out of 10
+2025-06-13 20:21:34,554 - {'epoch': 6, 'rec_loss': '0.9229'}
+2025-06-13 20:21:35,260 - {'Epoch': 6, 'HR@5': '0.0248', 'NDCG@5': '0.0160', 'HR@10': '0.0422', 'NDCG@10': '0.0217', 'HR@20': '0.0706', 'NDCG@20': '0.0288'}
+2025-06-13 20:21:35,261 - Validation score increased.  Saving model ...
+2025-06-13 20:21:37,618 - {'epoch': 7, 'rec_loss': '0.8691'}
+2025-06-13 20:21:38,432 - {'Epoch': 7, 'HR@5': '0.0248', 'NDCG@5': '0.0158', 'HR@10': '0.0404', 'NDCG@10': '0.0207', 'HR@20': '0.0734', 'NDCG@20': '0.0291'}
+2025-06-13 20:21:38,433 - Validation score increased.  Saving model ...
+2025-06-13 20:21:40,730 - {'epoch': 8, 'rec_loss': '0.8250'}
+2025-06-13 20:21:41,451 - {'Epoch': 8, 'HR@5': '0.0239', 'NDCG@5': '0.0154', 'HR@10': '0.0495', 'NDCG@10': '0.0236', 'HR@20': '0.0835', 'NDCG@20': '0.0321'}
+2025-06-13 20:21:41,452 - Validation score increased.  Saving model ...
+2025-06-13 20:21:43,847 - {'epoch': 9, 'rec_loss': '0.7873'}
+2025-06-13 20:21:44,476 - {'Epoch': 9, 'HR@5': '0.0303', 'NDCG@5': '0.0199', 'HR@10': '0.0514', 'NDCG@10': '0.0268', 'HR@20': '0.0862', 'NDCG@20': '0.0355'}
+2025-06-13 20:21:44,477 - Validation score increased.  Saving model ...
+2025-06-13 20:21:46,810 - {'epoch': 10, 'rec_loss': '0.7375'}
+2025-06-13 20:21:47,554 - {'Epoch': 10, 'HR@5': '0.0330', 'NDCG@5': '0.0191', 'HR@10': '0.0569', 'NDCG@10': '0.0267', 'HR@20': '0.0917', 'NDCG@20': '0.0354'}
+2025-06-13 20:21:47,555 - EarlyStopping counter: 1 out of 10
+2025-06-13 20:21:49,926 - {'epoch': 11, 'rec_loss': '0.7111'}
+2025-06-13 20:21:50,647 - {'Epoch': 11, 'HR@5': '0.0266', 'NDCG@5': '0.0165', 'HR@10': '0.0477', 'NDCG@10': '0.0233', 'HR@20': '0.0908', 'NDCG@20': '0.0342'}
+2025-06-13 20:21:50,648 - EarlyStopping counter: 2 out of 10
+2025-06-13 20:21:52,925 - {'epoch': 12, 'rec_loss': '0.6743'}
+2025-06-13 20:21:53,689 - {'Epoch': 12, 'HR@5': '0.0385', 'NDCG@5': '0.0229', 'HR@10': '0.0651', 'NDCG@10': '0.0313', 'HR@20': '0.1000', 'NDCG@20': '0.0400'}
+2025-06-13 20:21:53,690 - Validation score increased.  Saving model ...
+2025-06-13 20:21:55,970 - {'epoch': 13, 'rec_loss': '0.6452'}
+2025-06-13 20:21:56,682 - {'Epoch': 13, 'HR@5': '0.0358', 'NDCG@5': '0.0213', 'HR@10': '0.0716', 'NDCG@10': '0.0328', 'HR@20': '0.1000', 'NDCG@20': '0.0400'}
+2025-06-13 20:21:56,682 - EarlyStopping counter: 1 out of 10
+2025-06-13 20:21:58,933 - {'epoch': 14, 'rec_loss': '0.6149'}
+2025-06-13 20:21:59,634 - {'Epoch': 14, 'HR@5': '0.0422', 'NDCG@5': '0.0237', 'HR@10': '0.0679', 'NDCG@10': '0.0319', 'HR@20': '0.1018', 'NDCG@20': '0.0404'}
+2025-06-13 20:21:59,635 - Validation score increased.  Saving model ...
+2025-06-13 20:22:01,849 - {'epoch': 15, 'rec_loss': '0.6010'}
+2025-06-13 20:22:02,632 - {'Epoch': 15, 'HR@5': '0.0376', 'NDCG@5': '0.0226', 'HR@10': '0.0624', 'NDCG@10': '0.0304', 'HR@20': '0.1009', 'NDCG@20': '0.0400'}
+2025-06-13 20:22:02,633 - EarlyStopping counter: 1 out of 10
+2025-06-13 20:22:05,047 - {'epoch': 16, 'rec_loss': '0.5714'}
+2025-06-13 20:22:05,827 - {'Epoch': 16, 'HR@5': '0.0294', 'NDCG@5': '0.0179', 'HR@10': '0.0569', 'NDCG@10': '0.0268', 'HR@20': '0.0963', 'NDCG@20': '0.0367'}
+2025-06-13 20:22:05,828 - EarlyStopping counter: 2 out of 10
+2025-06-13 20:22:08,067 - {'epoch': 17, 'rec_loss': '0.5484'}
+2025-06-13 20:22:08,798 - {'Epoch': 17, 'HR@5': '0.0349', 'NDCG@5': '0.0197', 'HR@10': '0.0651', 'NDCG@10': '0.0295', 'HR@20': '0.0945', 'NDCG@20': '0.0368'}
+2025-06-13 20:22:08,799 - EarlyStopping counter: 3 out of 10
+2025-06-13 20:22:11,117 - {'epoch': 18, 'rec_loss': '0.5412'}
+2025-06-13 20:22:11,857 - {'Epoch': 18, 'HR@5': '0.0404', 'NDCG@5': '0.0249', 'HR@10': '0.0651', 'NDCG@10': '0.0328', 'HR@20': '0.1009', 'NDCG@20': '0.0416'}
+2025-06-13 20:22:11,858 - Validation score increased.  Saving model ...
+2025-06-13 20:22:14,248 - {'epoch': 19, 'rec_loss': '0.5239'}
+2025-06-13 20:22:15,038 - {'Epoch': 19, 'HR@5': '0.0413', 'NDCG@5': '0.0246', 'HR@10': '0.0679', 'NDCG@10': '0.0331', 'HR@20': '0.1018', 'NDCG@20': '0.0417'}
+2025-06-13 20:22:15,039 - Validation score increased.  Saving model ...
+2025-06-13 20:22:17,330 - {'epoch': 20, 'rec_loss': '0.5045'}
+2025-06-13 20:22:18,065 - {'Epoch': 20, 'HR@5': '0.0422', 'NDCG@5': '0.0247', 'HR@10': '0.0679', 'NDCG@10': '0.0327', 'HR@20': '0.0991', 'NDCG@20': '0.0406'}
+2025-06-13 20:22:18,066 - EarlyStopping counter: 1 out of 10
+2025-06-13 20:22:20,389 - {'epoch': 21, 'rec_loss': '0.4935'}
+2025-06-13 20:22:21,104 - {'Epoch': 21, 'HR@5': '0.0404', 'NDCG@5': '0.0248', 'HR@10': '0.0670', 'NDCG@10': '0.0335', 'HR@20': '0.1055', 'NDCG@20': '0.0433'}
+2025-06-13 20:22:21,105 - Validation score increased.  Saving model ...
+2025-06-13 20:22:23,300 - {'epoch': 22, 'rec_loss': '0.4794'}
+2025-06-13 20:22:24,033 - {'Epoch': 22, 'HR@5': '0.0413', 'NDCG@5': '0.0275', 'HR@10': '0.0679', 'NDCG@10': '0.0360', 'HR@20': '0.0963', 'NDCG@20': '0.0432'}
+2025-06-13 20:22:24,034 - EarlyStopping counter: 1 out of 10
+2025-06-13 20:22:26,352 - {'epoch': 23, 'rec_loss': '0.4713'}
+2025-06-13 20:22:27,032 - {'Epoch': 23, 'HR@5': '0.0312', 'NDCG@5': '0.0201', 'HR@10': '0.0670', 'NDCG@10': '0.0317', 'HR@20': '0.0945', 'NDCG@20': '0.0386'}
+2025-06-13 20:22:27,033 - EarlyStopping counter: 2 out of 10
+2025-06-13 20:22:29,401 - {'epoch': 24, 'rec_loss': '0.4615'}
+2025-06-13 20:22:30,203 - {'Epoch': 24, 'HR@5': '0.0394', 'NDCG@5': '0.0241', 'HR@10': '0.0624', 'NDCG@10': '0.0314', 'HR@20': '0.0954', 'NDCG@20': '0.0398'}
+2025-06-13 20:22:30,204 - EarlyStopping counter: 3 out of 10
+2025-06-13 20:22:32,525 - {'epoch': 25, 'rec_loss': '0.4551'}
+2025-06-13 20:22:33,273 - {'Epoch': 25, 'HR@5': '0.0413', 'NDCG@5': '0.0248', 'HR@10': '0.0697', 'NDCG@10': '0.0339', 'HR@20': '0.1073', 'NDCG@20': '0.0435'}
+2025-06-13 20:22:33,274 - Validation score increased.  Saving model ...
+2025-06-13 20:22:35,586 - {'epoch': 26, 'rec_loss': '0.4491'}
+2025-06-13 20:22:36,360 - {'Epoch': 26, 'HR@5': '0.0413', 'NDCG@5': '0.0255', 'HR@10': '0.0679', 'NDCG@10': '0.0340', 'HR@20': '0.1138', 'NDCG@20': '0.0457'}
+2025-06-13 20:22:36,361 - Validation score increased.  Saving model ...
+2025-06-13 20:22:38,673 - {'epoch': 27, 'rec_loss': '0.4322'}
+2025-06-13 20:22:39,489 - {'Epoch': 27, 'HR@5': '0.0413', 'NDCG@5': '0.0267', 'HR@10': '0.0734', 'NDCG@10': '0.0370', 'HR@20': '0.1257', 'NDCG@20': '0.0501'}
+2025-06-13 20:22:39,489 - Validation score increased.  Saving model ...
+2025-06-13 20:22:41,742 - {'epoch': 28, 'rec_loss': '0.4261'}
+2025-06-13 20:22:42,472 - {'Epoch': 28, 'HR@5': '0.0413', 'NDCG@5': '0.0258', 'HR@10': '0.0743', 'NDCG@10': '0.0365', 'HR@20': '0.1174', 'NDCG@20': '0.0475'}
+2025-06-13 20:22:42,473 - EarlyStopping counter: 1 out of 10
+2025-06-13 20:22:44,760 - {'epoch': 29, 'rec_loss': '0.4248'}
+2025-06-13 20:22:45,473 - {'Epoch': 29, 'HR@5': '0.0431', 'NDCG@5': '0.0267', 'HR@10': '0.0697', 'NDCG@10': '0.0354', 'HR@20': '0.1083', 'NDCG@20': '0.0452'}
+2025-06-13 20:22:45,474 - EarlyStopping counter: 2 out of 10
+2025-06-13 20:22:47,761 - {'epoch': 30, 'rec_loss': '0.4187'}
+2025-06-13 20:22:48,572 - {'Epoch': 30, 'HR@5': '0.0450', 'NDCG@5': '0.0268', 'HR@10': '0.0798', 'NDCG@10': '0.0380', 'HR@20': '0.1174', 'NDCG@20': '0.0475'}
+2025-06-13 20:22:48,573 - EarlyStopping counter: 3 out of 10
+2025-06-13 20:22:50,940 - {'epoch': 31, 'rec_loss': '0.4095'}
+2025-06-13 20:22:51,713 - {'Epoch': 31, 'HR@5': '0.0422', 'NDCG@5': '0.0259', 'HR@10': '0.0734', 'NDCG@10': '0.0358', 'HR@20': '0.1156', 'NDCG@20': '0.0465'}
+2025-06-13 20:22:51,714 - EarlyStopping counter: 4 out of 10
+2025-06-13 20:22:54,057 - {'epoch': 32, 'rec_loss': '0.4054'}
+2025-06-13 20:22:54,757 - {'Epoch': 32, 'HR@5': '0.0431', 'NDCG@5': '0.0258', 'HR@10': '0.0725', 'NDCG@10': '0.0353', 'HR@20': '0.1220', 'NDCG@20': '0.0478'}
+2025-06-13 20:22:54,757 - EarlyStopping counter: 5 out of 10
+2025-06-13 20:22:57,027 - {'epoch': 33, 'rec_loss': '0.3956'}
+2025-06-13 20:22:57,743 - {'Epoch': 33, 'HR@5': '0.0422', 'NDCG@5': '0.0236', 'HR@10': '0.0697', 'NDCG@10': '0.0324', 'HR@20': '0.1239', 'NDCG@20': '0.0462'}
+2025-06-13 20:22:57,744 - EarlyStopping counter: 6 out of 10
+2025-06-13 20:23:00,064 - {'epoch': 34, 'rec_loss': '0.3975'}
+2025-06-13 20:23:00,849 - {'Epoch': 34, 'HR@5': '0.0422', 'NDCG@5': '0.0255', 'HR@10': '0.0725', 'NDCG@10': '0.0352', 'HR@20': '0.1183', 'NDCG@20': '0.0468'}
+2025-06-13 20:23:00,850 - EarlyStopping counter: 7 out of 10
+2025-06-13 20:23:03,261 - {'epoch': 35, 'rec_loss': '0.3825'}
+2025-06-13 20:23:03,999 - {'Epoch': 35, 'HR@5': '0.0468', 'NDCG@5': '0.0282', 'HR@10': '0.0771', 'NDCG@10': '0.0379', 'HR@20': '0.1275', 'NDCG@20': '0.0507'}
+2025-06-13 20:23:04,000 - Validation score increased.  Saving model ...
+2025-06-13 20:23:06,377 - {'epoch': 36, 'rec_loss': '0.3867'}
+2025-06-13 20:23:07,126 - {'Epoch': 36, 'HR@5': '0.0440', 'NDCG@5': '0.0249', 'HR@10': '0.0716', 'NDCG@10': '0.0337', 'HR@20': '0.1257', 'NDCG@20': '0.0474'}
+2025-06-13 20:23:07,126 - EarlyStopping counter: 1 out of 10
+2025-06-13 20:23:09,432 - {'epoch': 37, 'rec_loss': '0.3863'}
+2025-06-13 20:23:10,217 - {'Epoch': 37, 'HR@5': '0.0431', 'NDCG@5': '0.0246', 'HR@10': '0.0752', 'NDCG@10': '0.0348', 'HR@20': '0.1220', 'NDCG@20': '0.0465'}
+2025-06-13 20:23:10,218 - EarlyStopping counter: 2 out of 10
+2025-06-13 20:23:12,564 - {'epoch': 38, 'rec_loss': '0.3744'}
+2025-06-13 20:23:13,366 - {'Epoch': 38, 'HR@5': '0.0422', 'NDCG@5': '0.0279', 'HR@10': '0.0651', 'NDCG@10': '0.0352', 'HR@20': '0.1193', 'NDCG@20': '0.0488'}
+2025-06-13 20:23:13,367 - EarlyStopping counter: 3 out of 10
+2025-06-13 20:23:15,638 - {'epoch': 39, 'rec_loss': '0.3767'}
+2025-06-13 20:23:16,392 - {'Epoch': 39, 'HR@5': '0.0312', 'NDCG@5': '0.0205', 'HR@10': '0.0569', 'NDCG@10': '0.0289', 'HR@20': '0.1073', 'NDCG@20': '0.0415'}
+2025-06-13 20:23:16,392 - EarlyStopping counter: 4 out of 10
+2025-06-13 20:23:18,732 - {'epoch': 40, 'rec_loss': '0.3688'}
+2025-06-13 20:23:19,564 - {'Epoch': 40, 'HR@5': '0.0358', 'NDCG@5': '0.0236', 'HR@10': '0.0651', 'NDCG@10': '0.0331', 'HR@20': '0.1193', 'NDCG@20': '0.0465'}
+2025-06-13 20:23:19,565 - EarlyStopping counter: 5 out of 10
+2025-06-13 20:23:21,941 - {'epoch': 41, 'rec_loss': '0.3759'}
+2025-06-13 20:23:22,707 - {'Epoch': 41, 'HR@5': '0.0367', 'NDCG@5': '0.0217', 'HR@10': '0.0642', 'NDCG@10': '0.0305', 'HR@20': '0.1183', 'NDCG@20': '0.0443'}
+2025-06-13 20:23:22,708 - EarlyStopping counter: 6 out of 10
+2025-06-13 20:23:24,993 - {'epoch': 42, 'rec_loss': '0.3662'}
+2025-06-13 20:23:25,747 - {'Epoch': 42, 'HR@5': '0.0367', 'NDCG@5': '0.0216', 'HR@10': '0.0771', 'NDCG@10': '0.0343', 'HR@20': '0.1248', 'NDCG@20': '0.0464'}
+2025-06-13 20:23:25,748 - EarlyStopping counter: 7 out of 10
+2025-06-13 20:23:28,148 - {'epoch': 43, 'rec_loss': '0.3679'}
+2025-06-13 20:23:28,904 - {'Epoch': 43, 'HR@5': '0.0394', 'NDCG@5': '0.0245', 'HR@10': '0.0679', 'NDCG@10': '0.0334', 'HR@20': '0.1165', 'NDCG@20': '0.0460'}
+2025-06-13 20:23:28,904 - EarlyStopping counter: 8 out of 10
+2025-06-13 20:23:31,237 - {'epoch': 44, 'rec_loss': '0.3689'}
+2025-06-13 20:23:31,930 - {'Epoch': 44, 'HR@5': '0.0422', 'NDCG@5': '0.0245', 'HR@10': '0.0679', 'NDCG@10': '0.0328', 'HR@20': '0.1193', 'NDCG@20': '0.0459'}
+2025-06-13 20:23:31,930 - EarlyStopping counter: 9 out of 10
+2025-06-13 20:23:34,267 - {'epoch': 45, 'rec_loss': '0.3662'}
+2025-06-13 20:23:35,056 - {'Epoch': 45, 'HR@5': '0.0385', 'NDCG@5': '0.0230', 'HR@10': '0.0752', 'NDCG@10': '0.0347', 'HR@20': '0.1239', 'NDCG@20': '0.0469'}
+2025-06-13 20:23:35,056 - EarlyStopping counter: 10 out of 10
+2025-06-13 20:23:35,056 - Early stopping
+2025-06-13 20:23:35,056 - ---------------Validation Score---------------
+2025-06-13 20:23:35,833 - {'Epoch': 0, 'HR@5': '0.0468', 'NDCG@5': '0.0282', 'HR@10': '0.0771', 'NDCG@10': '0.0379', 'HR@20': '0.1275', 'NDCG@20': '0.0507'}
+2025-06-13 20:23:35,834 - SASRec_LastFM
+2025-06-13 20:23:35,834 - {'Epoch': 0, 'HR@5': '0.0468', 'NDCG@5': '0.0282', 'HR@10': '0.0771', 'NDCG@10': '0.0379', 'HR@20': '0.1275', 'NDCG@20': '0.0507'}

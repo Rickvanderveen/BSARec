@@ -20,8 +20,8 @@ source activate bsarec
 # Train
 python main.py \
   --data_name LastFM \
-  --lr 0.0005 \
-  --num_attention_heads 2 \
+  --lr 0.001 \
+  --num_attention_heads 4 \
   --train_name SASRec_LastFM \
   --model_type SASRec \
   --data_dir data/
@@ -29,7 +29,7 @@ python main.py \
 # Evaluate which also saves the predictions
 python main.py \
   --data_name LastFM \
-  --num_attention_heads 2 \
+  --num_attention_heads 4 \
   --load_model SASRec_LastFM \
   --model_type SASRec \
   --do_eval \

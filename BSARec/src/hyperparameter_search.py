@@ -116,11 +116,17 @@ def parse_args():
     return parser.parse_args()
 
 
+def get_slurm_file_name() -> str:
+    slurm_job_id = os.getenv("SLURM_ARRAY_JOB_ID")
+    slurm_task_id = os.getenv("SLURM_ARRAY_TASK_ID")
+    return f"{slurm_job_id}_{slurm_task_id}"
+
+
 def main():
     args = parse_args()
 
-    run_dir = PROJECT_ROOT.joinpath(args.output_dir, args.train_name, get_local_time())
-    run_dir.mkdir(parents=True, exist_ok=True)
+    run_dir = PROJECT_ROOT.joinpath(args.output_dir, args.train_name, get_slurm_file_name())
+    run_dir.mkdir(parents=True)
 
     log_path = run_dir / "out.log"
     logger = set_logger(log_path)

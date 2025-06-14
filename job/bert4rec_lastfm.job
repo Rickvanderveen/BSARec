@@ -30,6 +30,7 @@ python main.py \
 python main.py \
   --data_name LastFM \
   --num_attention_heads 2 \
+  --mask_ratio 0.4 \
   --load_model BERT4Rec_LastFM \
   --model_type BERT4Rec \
   --do_eval \

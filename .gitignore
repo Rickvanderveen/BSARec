@@ -177,3 +177,8 @@ cython_debug/
 # Raw datasets
 **/data/raw
 !**/output/*.log
+
+**job/out/hparams/
+
+**/hparam_search/**/*.pt
+!**/hparam_search/**/*.log
