@@ -7,6 +7,7 @@ import yaml
 import random
 
 from .process_dataset import Process
+from .base_model.bsarec import BSARec
 from .base_model import MF, GRU4Rec, SASRec, BPR, BPR_Seq
 from .rank_model import IPS, SDRO, Minmax_SGD, APR, FOCF, FairDual, Reg, FairNeg, DPR
 
@@ -158,16 +159,14 @@ class RecTrainer(object):
             self.Model = GRU4Rec(config).to(self.device)
         elif config['model'] == 'SASRec':
             self.Model = SASRec(config).to(self.device)
-
+        elif config['model'] == 'BSARec':
+            self.Model = BSARec(config).to(self.device)
         else:
             raise NotImplementedError(f"Not supported model type: {config['model']}")
 
         self.check_model_stage(config, self.Model)
 
         self.group_weight = np.ones(config['group_num'])
-
-
-
 
 
         train_data_df = pd.read_csv(os.path.join(dir, self.dataset + ".train"), sep='\t')
@@ -386,5 +385,3 @@ class RecTrainer(object):
             json.dump(test_result, file)
         print(test_result)
         print(f"dump in {log_dir}")
-
-
