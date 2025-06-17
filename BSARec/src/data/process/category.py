@@ -1,9 +1,12 @@
 import argparse
 
-from category import diginetica, lastfm, ml1m
+from category import ml1m
+from category.lastfm import LastFMCategoryCreator
+from category.diginetica import DigineticaCategoryCreator
 
 
 CATEGORY_DATASET_CHOICES = ["Diginetica", "LastFM", "ML-1M"]
+CATEGORY_TYPES = ["Popularity", "Native"]
 
 
 def parse_args():
@@ -24,6 +27,19 @@ def parse_args():
         help="Process all available datasets",
     )
 
+    parser.add_argument(
+        "--category",
+        "-c",
+        choices=CATEGORY_TYPES,
+        default="Native",
+        help=(
+        "Category map type to create. "
+        "Options:\n"
+        f"  - {CATEGORY_TYPES[0]}: Use dataset-specific categories\n"
+        f"  - {CATEGORY_TYPES[1]}: Use a popularity-based category set"
+    ),
+    )
+
     # Parse and return arguments
     return parser.parse_args()
 
@@ -33,9 +49,9 @@ def main():
 
     if args.all:
         print("Create Diginetica product-category mapping")
-        diginetica.create_product_category_mapping()
+        DigineticaCategoryCreator.create(args.category)
         print("Create LastFM artist-genre mapping")
-        lastfm.create_artist_genre_mapping()
+        LastFMCategoryCreator.create(args.category)
         print("Create ML-1M movie-category mapping")
         ml1m.create_movie_category_mapping()
 
@@ -44,9 +60,9 @@ def main():
     print(f"Creating category map for dataset: {args.dataset}")
     dataset = args.dataset.lower()
     if dataset == "diginetica":
-        diginetica.create_product_category_mapping()
+        DigineticaCategoryCreator.create(args.category)
     elif dataset == "lastfm":
-        lastfm.create_artist_genre_mapping()
+        LastFMCategoryCreator.create(args.category)
     elif dataset == "ml-1m":
         ml1m.create_movie_category_mapping()
     else:

@@ -5,6 +5,7 @@ import pandas as pd
 import difflib
 
 from _utils import DATA_DIR, RAW_DATA_DIR
+from category import DatasetCategoryMapCreator
 
 
 CATEGORY_MAPPING_DIR = DATA_DIR / "category_maps" / "LastFM"
@@ -383,3 +384,43 @@ def create_artist_genre_mapping():
         json.dump(mapping, file, indent=4)
 
     print(f"Artist category mapping stored in `{mapping_file}`")
+
+
+def create_popularity_map(top_percentage_popularity: float = 0.2):
+    user_tagged_artists = _load_user_tagged_artists()
+
+    # Count the artistIDs
+    count = (
+        user_tagged_artists["artistID"]
+        .value_counts(sort=True, ascending=False)
+        .reset_index()
+    )
+
+    top_percent_count = int(len(count) * top_percentage_popularity)
+
+    mapping = {}
+    for idx, row in enumerate(count.itertuples()):
+        popularity_category = "unpop"
+        if idx <= top_percent_count:
+            popularity_category = "pop"
+
+        item_id = row.artistID
+        mapping[item_id] = popularity_category
+    
+    # Save the mapping as json
+    CATEGORY_MAPPING_DIR.mkdir(parents=True, exist_ok=True)
+    mapping_file = CATEGORY_MAPPING_DIR / "artist_popularity_mapping.json"
+    with mapping_file.open("w", newline="", encoding="utf-8") as file:
+        json.dump(mapping, file, indent=4)
+    
+    print(f"Artist popularity mapping stored in `{mapping_file}`")
+
+
+class LastFMCategoryCreator(DatasetCategoryMapCreator):
+    @staticmethod
+    def create_native_map():
+        create_artist_genre_mapping()
+
+    @staticmethod
+    def create_popularity_map():
+        create_popularity_map()
