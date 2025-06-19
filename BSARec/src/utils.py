@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import random
 import torch
 import datetime
@@ -174,3 +175,19 @@ class EarlyStopping:
             self.logger.info(f'Validation score increased.  Saving model ...')
         torch.save(model.state_dict(), self.checkpoint_path)
         self.score_min = score
+
+
+def read_last_line_from_file(path: Path):
+    with path.open('rb') as f:
+        try:  # catch OSError in case of a one line file 
+            f.seek(-2, os.SEEK_END)
+            while f.read(1) != b'\n':
+                f.seek(-2, os.SEEK_CUR)
+        except OSError:
+            f.seek(0)
+        last_line = f.readline().decode()
+        return last_line
+
+def read_first_line_from_file(path: Path):
+    with path.open("r") as f:
+        return f.readline()
