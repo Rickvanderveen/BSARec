@@ -39,7 +39,7 @@ def set_seed(seed):
 
 def check_path(path):
     if not os.path.exists(path):
-        os.makedirs(path)
+        os.makedirs(path, exist_ok=True)
         print(f'{path} created')
 
 def get_local_time():
