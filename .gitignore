@@ -178,6 +178,18 @@ cython_debug/
 **/data/raw
 !**/output/*.log
 
+!**/output/BERT4Rec/*.log
+!**/output/SASRec/*.log
+!**/output/DuoRec/*.log
+!**/output/FEARec/*.log
+!**/output/BSARec/*.log
+
+**/output/BERT4Rec/*.pt
+**/output/SASRec/*.pt
+**/output/DuoRec/*.pt
+**/output/FEARec/*.pt
+**/output/BSARec/*.pt
+
 **job/out/hparams/
 
 **/hparam_search/**/*.pt

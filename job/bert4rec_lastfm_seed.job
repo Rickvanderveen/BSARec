@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_a100
+#SBATCH --job-name=BERT4Rec
+#SBATCH --ntasks=1
+#SBATCH --gpus=1
+#SBATCH --cpus-per-task=9
+#SBATCH --time=01:00:00
+#SBATCH --output=out/seed/BERT4Rec_LastFM_%A.out
+
+module purge
+module load 2023
+module load Anaconda3/2023.07-2
+
+cd $HOME/BSARec/BSARec/src/
+
+source activate bsarec
+
+# Train
+python main.py \
+  --data_name LastFM \
+  --lr 0.001 \
+  --num_attention_heads 2 \
+  --mask_ratio 0.4 \
+  --train_name "BERT4Rec_LastFM_$1" \
+  --model_type BERT4Rec \
+  --data_dir data/ \
+  --output_dir output/BERT4Rec/ \
+  --seed "$1"

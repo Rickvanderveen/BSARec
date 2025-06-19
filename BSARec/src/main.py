@@ -13,6 +13,8 @@ from dataset import get_seq_dic, get_dataloder, get_rating_matrix
 def main():
     args = parse_args()
 
+    check_path(args.output_dir)
+
     if not args.do_eval:
         log_path = os.path.join(args.output_dir, args.train_name + ".log")
     else:
@@ -20,7 +22,6 @@ def main():
     logger = set_logger(log_path)
 
     set_seed(args.seed)
-    check_path(args.output_dir)
 
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
     args.cuda_condition = torch.cuda.is_available() and not args.no_cuda
