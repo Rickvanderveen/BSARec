@@ -211,16 +211,17 @@ if __name__ == '__main__':
     parser.add_argument('--pred_folder', type=str, required=True, help='x')
     # parser.add_argument('--number_list', type=list, required=True, help='x')
     parser.add_argument('--method', type=str, required=True, help='x')
+    parser.add_argument('--model', type=str, required=True, help='x')
     
 
 
     args = parser.parse_args()
     pred_folder = args.pred_folder
-    # number_list = args.number_list
     method_name = args.method
+    model_name = args.model
     if not os.path.exists('results/'):
         os.makedirs('results/')
-    eval_file = f'results/eval_{method_name}.txt'
+    eval_file = f'results/eval_{method_name}_{model_name}.txt'
     f = open(eval_file, 'w')
     # for dataset in ['instacart', 'dunnhumby', 'tafeng']: 
     for dataset in ['LastFM']:
