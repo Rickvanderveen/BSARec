@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 sys.path.append("BSARec/src")
 import torch
@@ -38,31 +39,22 @@ class Args:
     valid_rating_matrix = None
     test_rating_matrix = None
 
-    def __init__(self, model_type, output_dir, model_name, data_dir, data_name, 
-                 save_name, num_attention_heads, alpha=None, c=None, mask_ratio=None):
-        
-        if model_type not in ("bsarec", "sasrec", "bert4rec", "duorec", "fearec"):
-            raise Exception
-        
-        if model_type == "bsarec":
-            if alpha == None or c == None:
-                raise Exception
-            self.alpha = alpha
-            self.c = c
-            
-        if model_type == "bert4rec":
-            if mask_ratio == None:
-                raise Exception
-            self.mask_ratio = mask_ratio
+    def __init__(self, output_dir, model_name, data_dir, data_name, save_name):
+
+        log = open(f"{output_dir}{model_name}.log").readlines()[0]
+        params = ["c", "alpha", "num_attention_heads", "mask_ratio"]
+        values = {p: re.findall(p + r"=(\d+\.?\d*)", log) for p in params}
+        self.c = int(values["c"][0]) if values["c"] else None
+        self.alpha = float(values["alpha"][0]) if values["alpha"] else None
+        self.num_attention_heads = int(values["num_attention_heads"][0]) if values["num_attention_heads"] else None
+        self.mask_ratio = float(values["mask_ratio"][0]) if values["mask_ratio"] else None
+        self.model_type = re.findall(r"model_type='([\w_]+)'", log)[0].lower()
 
         self.save_name = save_name
-        self.model_type = model_type    
         self.data_dir = data_dir
         self.data_name = data_name
         self.output_dir = output_dir
         self.load_model = self.train_name = model_name
-        self.num_attention_heads = num_attention_heads
-
         self.checkpoint_path = os.path.join(self.output_dir, self.train_name + ".pt")
         self.same_target_path = os.path.join(self.data_dir, self.data_name + "_same_target.npy")
 
@@ -114,17 +106,11 @@ def get_relevance_scores(args):
 if __name__ == "__main__":
 
     args = Args(
-        model_type="bsarec",
         output_dir="./synced/output/",
         model_name="BSARec_LastFM_CP",
         data_dir="./synced/data/",
         data_name="LastFM",
         save_name="bsarec_relmat",
-        num_attention_heads=4,
-
-        alpha=0.5,        # (bsarec)
-        c=7,              # (bsarec)
-        # mask_ratio=...  # (bert4rec)
     )
 
     get_relevance_scores(args)
