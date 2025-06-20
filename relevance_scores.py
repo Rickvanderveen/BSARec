@@ -11,44 +11,25 @@ from dataset import get_seq_dic, get_dataloder, get_rating_matrix
 
 
 class Args:
-    
-    do_eval = True
-    num_items = 10
-    num_users = 10
-    lr = 0.001
-    batch_size = 256
-    epochs = 200
-    no_cuda = True           # set to False
-    log_freq = 1
-    patience = 10
-    num_workers = 4
-    seed = 42                # change?
-    weight_decay = 0.0
-    adam_beta1 = 0.9
-    adam_beta2 = 0.999
-    gpu_id = 0
-    variance = 5
-    max_seq_length = 50
-    hidden_size = 64
-    num_hidden_layers = 2
-    hidden_act = "gelu"
-    attention_probs_dropout_prob = 0.5
-    hidden_dropout_prob = 0.5  
-    initializer_range = 0.02
-    item_size = None
-    valid_rating_matrix = None
-    test_rating_matrix = None
 
     def __init__(self, output_dir, model_name, data_dir, data_name, save_name):
 
         log = open(f"{output_dir}{model_name}.log").readlines()[0]
-        params = ["c", "alpha", "num_attention_heads", "mask_ratio"]
-        values = {p: re.findall(p + r"=(\d+\.?\d*)", log) for p in params}
-        self.c = int(values["c"][0]) if values["c"] else None
-        self.alpha = float(values["alpha"][0]) if values["alpha"] else None
-        self.num_attention_heads = int(values["num_attention_heads"][0]) if values["num_attention_heads"] else None
-        self.mask_ratio = float(values["mask_ratio"][0]) if values["mask_ratio"] else None
-        self.model_type = re.findall(r"model_type='([\w_]+)'", log)[0].lower()
+
+        namespc = re.findall(r"Namespace\((.+)\)", log)
+        namespc = namespc[0].split(", ")
+        namespc = {k: v for n in namespc for k, v in [n.split("=")]}
+        for k, v in namespc.items():
+            v = v.replace("\'", "")
+            namespc[k] = v
+
+            if re.search(r"\d\.?\d*", v):
+                if v[0].isdigit(): # bandage fix for matching "BERT4Rec"
+                    namespc[k] = float(v) if "." in v else int(v)
+            else:
+                namespc[k] = bool(v) if v in ("True", "False") else v
+
+        self.__dict__.update(namespc)
 
         self.save_name = save_name
         self.data_dir = data_dir
