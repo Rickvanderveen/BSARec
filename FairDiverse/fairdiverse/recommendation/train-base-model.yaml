@@ -2,6 +2,7 @@ model: SASRec
 data_type: sequential
 reprocess: true
 fair-rank: false
+rank_model: FOCF
 use_llm: false
 log_name: SASRec_LastFM
 device: cpu

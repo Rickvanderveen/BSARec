@@ -1,0 +1,7 @@
+name: recsys
+channels:
+  - pytorch
+  - nvidia
+  - defaults
+dependencies:
+  - python=3.12

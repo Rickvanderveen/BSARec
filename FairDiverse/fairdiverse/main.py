@@ -12,7 +12,7 @@ if __name__ == "__main__":
     parser.add_argument("--task", type=str, choices=["recommendation", "search"], default='recommendation', help='IR tasks')
     parser.add_argument("--stage", type=str, choices=["pre-processing", "in-processing", "post-processing"],
                         default="post-processing", help="your evaluation stage")
-    parser.add_argument("--dataset", type=str, choices=["steam", "clueweb09", "compas"], default="steam", help="your dataset")
+    parser.add_argument("--dataset", type=str, choices=["clueweb09", "steam", "compas", "LastFM"], default="steam", help="your dataset")
     parser.add_argument("--train_config_file", type=str, default="Post-processing.yaml", help="your train yaml file")
     #parser.add_argument("--reprocess", type=str, choices=["yes", "no"], default="no", help="your dataset")
     #parser.add_argument("topk", type=float, default=10, help="ranking size")
@@ -56,7 +56,3 @@ if __name__ == "__main__":
             trainer.train()
     else:
         raise NotImplementedError
-
-
-
-
