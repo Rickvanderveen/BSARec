@@ -194,3 +194,5 @@ cython_debug/
 
 **/hparam_search/**/*.pt
 !**/hparam_search/**/*.log
+
+synced/

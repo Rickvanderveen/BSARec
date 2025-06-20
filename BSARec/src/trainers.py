@@ -47,7 +47,7 @@ class Trainer:
     def load(self, file_name):
         original_state_dict = self.model.state_dict()
         self.logger.info(original_state_dict.keys())
-        new_dict = torch.load(file_name)
+        new_dict = torch.load(file_name, map_location=self.device) # add map location for cpu
         self.logger.info(new_dict.keys())
         for key in new_dict:
             if 'beta' in key:
