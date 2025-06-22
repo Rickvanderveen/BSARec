@@ -73,6 +73,7 @@ def get_relevance_scores(args):
         recommend_output = model.predict(input_ids, user_ids)
         recommend_output = recommend_output[:, -1, :] 
         rating_pred = trainer.predict_full(recommend_output) 
+        rating_pred = rating_pred[:, :args.item_size]
         relevance_scores.append(rating_pred)
 
     relevance_scores = torch.vstack(relevance_scores).detach().numpy()
@@ -93,5 +94,4 @@ if __name__ == "__main__":
         data_name="LastFM",
         save_name="bsarec_relmat",
     )
-
     get_relevance_scores(args)
