@@ -32,7 +32,7 @@ os.makedirs("recommendation/dataset", exist_ok=True)
 # In[ ]:
 
 
-def print_evaluation_results(model_name, dataset_name):
+def print_evaluation_results(model_name, dataset_name, title=None):
     if dataset_name !="":
         today = date.today()
         today_format = f"{today.year}-{today.month}-{today.day}"
@@ -56,6 +56,8 @@ def print_evaluation_results(model_name, dataset_name):
     df = pd.DataFrame(table).T
     df = df[sorted(df.columns, key=lambda x: int(x[1:]))]
 
+    if title:
+        print(f"{title}")
     print(df)
 
 
@@ -376,6 +378,7 @@ with open("main.py", "w") as f:
 
 # Experiment with the baselines models provided by FairDiverse
 base_model_name = "BSARec"
+inprocessing_model_name = "FOCF"
 config_base = {
     # ############ base model #########################
     "model": f"{base_model_name}",
@@ -384,10 +387,12 @@ config_base = {
     # Should preprocessing be redone (ignore cache)?
     "reprocess": True,
 
-    # Fair-rank settings !!! Don't change - needs to be set to False for running the base model !!!
+    # Fair-rank settings !!! eeds to be set to False for running the base model !!!
+    # Set to True to apply fairness/diversity intervention
     "fair-rank": False,  # run fair-rank module or not
+    # Only does something if 'fair-rank' is True.
     # in-processing model to be used for ranking
-    "rank_model": "FOCF",
+    "rank_model": inprocessing_model_name,
 
     # LLM recommendation setting !!! Don't change - needs to be set to False for running the base model !!!
     "use_llm": False,
@@ -413,25 +418,26 @@ config_base = {
     "fairness_type": "Exposure"  # ["Exposure", "Utility"]
 }
 
-with open(f"./recommendation/train-base-model.yaml", "w") as file:
+with open(f"./recommendation/inprocessing.yaml", "w") as file:
     yaml.dump(config_base, file, sort_keys=False)
 
 
 # #### **Step 2: Run the Base Recommender System**
 
 # In[ ]:
+use_subprocess = False
 
 # YOU MIGHT HAVE TO RUN THIS CELL IN THE TERMINAL FOR BETTER PERFORMANCE
-# python main.py --task recommendation --stage in-processing --dataset LastFM --train_config_file train-base-model.yaml
+# python main.py --task recommendation --stage in-processing --dataset LastFM --train_config_file inprocessing.yaml
 # Capture stdout and stderr by setting capture_output=True or using pipes
-if False:
+if use_subprocess:
     subprocess.run([
         "python",
         "main.py",
         "--task", "recommendation",
         "--stage", "in-processing",
         "--dataset", dataset_name,
-        "--train_config_file", "train-base-model.yaml"
+        "--train_config_file", "inprocessing.yaml"
     ], check=True)
 
 # #### **Output files**
@@ -467,16 +473,6 @@ if False:
 #             ├── config.yaml            # Configuration used for training
 #             ├── ranking_scores.npz     # Numpy array of ranking scores
 #             └── test_result.json       # Evaluation metrics
-
-# **Evaluation Results 📈**
-#
-# ---
-
-# In[ ]:
-
-
-print_evaluation_results(base_model_name, dataset_name)
-
 
 # ## **3. Run Post-processing Model**
 #
@@ -530,7 +526,7 @@ config_model = {
     "fairness_type": "Exposure"  # "Exposure" computes exposure of item group; "Utility" computes score differences
 }
 
-with open(f"./recommendation/postprocessing_with_fairdiverse.yaml", "w") as file:
+with open(f"./recommendation/postprocessing.yaml", "w") as file:
     yaml.dump(config_model, file, sort_keys=False)
 
 
@@ -539,15 +535,15 @@ with open(f"./recommendation/postprocessing_with_fairdiverse.yaml", "w") as file
 # In[ ]:
 
 # YOU MIGHT HAVE TO RUN THIS CELL IN THE TERMINAL FOR BETTER PERFORMANCE
-# python main.py --task recommendation --stage post-processing --dataset LastFM --train_config_file postprocessing_with_fairdiverse.yaml
-if False:
+# python main.py --task recommendation --stage post-processing --dataset LastFM --train_config_file postprocessing.yaml
+if use_subprocess:
     subprocess.run([
         "python",
         "main.py",
         "--task", "recommendation",
         "--stage", "post-processing",
         "--dataset", dataset_name,
-        "--train_config_file", "postprocessing_with_fairdiverse.yaml"
+        "--train_config_file", "postprocessing.yaml"
     ], check=True)
 
 
@@ -591,17 +587,15 @@ if False:
 #
 
 # In[ ]:
-
-
-# evaluation results of post-processing model
-print_evaluation_results(postprocessing_model_name, dataset_name)
+# evaluation results of the base model
+print_evaluation_results(base_model_name, dataset_name, title=f"{base_model_name} in-processing {f'({inprocessing_model_name})' if config_base['fair-rank'] else ''}")
 
 
 # In[ ]:
-
-
-# evaluation results of the base model
-print_evaluation_results(base_model_name, dataset_name)
+# evaluation results of post-processing model
+print_evaluation_results(postprocessing_model_name, dataset_name, title=f"{base_model_name} Post-processing {f'({postprocessing_model_name})' if config_model['fair-rank'] else ''}")
 
 
 # #### ✅ CP-Fair improves fairness and diversity metrics over the base model SASRec, with only a small drop in NDCG and utility loss.
+
+# %%
