@@ -8,8 +8,11 @@ def compute_loss(self, interaction):
 
 
 def full_predict(self, user_dict, items):
-    scores = self.predict(user_dict['history_ids'], user_dict['user_ids'])
-    scores = scores.sum(-1)
+    user_embeds = self.add_position_embedding(user_dict['history_ids']).mean(dim=1)
+    print(user_embeds.mean(dim=1).shape)
+    item_embeds = self.item_embeddings(items)
+    scores = (user_embeds * item_embeds)
+    scores = scores.sum(dim=-1)  # [B, H]
     return nn.Sigmoid()(scores)
 
 
