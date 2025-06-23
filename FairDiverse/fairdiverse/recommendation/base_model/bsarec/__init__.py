@@ -1,7 +1,22 @@
+import torch.nn as nn
 from .bsarec import BSARecModel
 
 
+def compute_loss(self, interaction):
+    input_ids, answers = interaction['history_ids'], interaction['item_ids']
+    return self.calculate_loss(input_ids, answers, None, None, None)
+
+
+def full_predict(self, user_dict, items):
+    scores = self.predict(user_dict['history_ids'], user_dict['user_ids'])
+    scores = scores.sum(-1)
+    return nn.Sigmoid()(scores)
+
+
 def BSARec(config):
+    config['no_cuda'] = config.get('no_cuda', False)
+    config['gpu_id'] = config.get('gpu_id', '0')
+
     config['max_seq_length'] = config.get('max_seq_length', 50)
     config['hidden_size'] = config.get('hidden_size', 64)
     config['num_hidden_layers'] = config.get('num_hidden_layers', 2)
@@ -14,4 +29,20 @@ def BSARec(config):
     config['c'] = config.get('c', 3)
     config['alpha'] = config.get('alpha', 0.9)
 
-    return BSARecModel(config)
+    # convert the dict to an object, such that config['max_seq_length'] can be accessed as config.max_seq_length
+    class Config:
+        def __init__(self, config_dict):
+            for key, value in config_dict.items():
+                setattr(self, key, value)
+
+    config = Config(config)
+
+    model = BSARecModel(config)
+    model.type = ["sequential"]
+    model.IR_type = ["retrieval", "ranking"]
+
+    # bind the methods to the model instance
+    model.compute_loss = compute_loss.__get__(model, BSARecModel)
+    model.full_predict = full_predict.__get__(model, BSARecModel)
+
+    return model

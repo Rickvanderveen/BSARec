@@ -375,7 +375,7 @@ with open("main.py", "w") as f:
 
 
 # Experiment with the baselines models provided by FairDiverse
-base_model_name = "SASRec"
+base_model_name = "BSARec"
 config_base = {
     # ############ base model #########################
     "model": f"{base_model_name}",
