@@ -425,7 +425,7 @@ else:
 # Create write file
 model_path = Path(f"results/")
 model_path.mkdir(parents=True, exist_ok=True)
-with open(f"{model_path}/{base_model_name}_{dataset_name}.txt", "w") as file_handle:
+with open(f"{model_path}/{base_model_name}_{dataset_name}_{inprocessing_model_name}_{postprocessing_model_name}.txt", "w") as file_handle:
     # evaluation results of the base model
     print_evaluation_results(config_base['log_name'], dataset_name, f"{base_model_name} base", file_handle)
 
