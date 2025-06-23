@@ -3,13 +3,26 @@ from .bsarec import BSARecModel
 
 
 def compute_loss(self, interaction):
-    input_ids, answers = interaction['history_ids'], interaction['item_ids']
-    return self.calculate_loss(input_ids, answers, None, None, None)
+    return self.calculate_loss(interaction, interaction['item_ids'], None, None, None)
+
+
+def forward(self, user_dict, item_id=None, all_sequence_output=False):
+    extended_attention_mask = self.get_attention_mask(user_dict['history_ids'])
+    sequence_emb = self.add_position_embedding(user_dict['history_ids'])
+    item_encoded_layers = self.item_encoder(sequence_emb,
+                                            extended_attention_mask,
+                                            output_all_encoded_layers=True,
+                                            )
+    if all_sequence_output:
+        sequence_output = item_encoded_layers
+    else:
+        sequence_output = item_encoded_layers[-1]
+
+    return sequence_output
 
 
 def full_predict(self, user_dict, items):
     user_embeds = self.add_position_embedding(user_dict['history_ids']).mean(dim=1)
-    print(user_embeds.mean(dim=1).shape)
     item_embeds = self.item_embeddings(items)
     scores = (user_embeds * item_embeds)
     scores = scores.sum(dim=-1)  # [B, H]
@@ -47,5 +60,6 @@ def BSARec(config):
     # bind the methods to the model instance
     model.compute_loss = compute_loss.__get__(model, BSARecModel)
     model.full_predict = full_predict.__get__(model, BSARecModel)
+    model.forward = forward.__get__(model, BSARecModel)
 
     return model
