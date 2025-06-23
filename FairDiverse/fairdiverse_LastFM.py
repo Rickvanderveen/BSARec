@@ -76,7 +76,9 @@ dataset_name = "LastFM"
 
 
 # If folder LastFM dataset not exists
-if not os.path.exists('recommendation/dataset/LastFM'):
+if os.path.exists('recommendation/dataset/LastFM'):
+    print("LastFM dataset already exists. Skipping download and processing.")
+else:
     # Download the LastFM dataset
     subprocess.run(['wget', 'https://files.grouplens.org/datasets/hetrec2011/hetrec2011-lastfm-2k.zip', '-O', 'recommendation/dataset/LastFM.zip', '-nc'], check=True)
 
@@ -90,72 +92,61 @@ if not os.path.exists('recommendation/dataset/LastFM'):
     subprocess.run(['rm', 'recommendation/dataset/LastFM.zip'], check=True)
 
 
-#
-# #### 🎬 MovieLens Dataset
-# In this notebook we will use the MovieLens Dataset as an example.
-#
-# GroupLens Research has collected and made available rating data sets from the MovieLens web site (https://movielens.org). This dataset describes 5-star rating and free-text tagging activity from MovieLens, a movie recommendation service.
-#
-# **Download the MovieLens dataset from RecBole: [MovieLens Dataset (RecBole processed)](https://drive.google.com/file/d/1G7_XhdSi1BhIvRETg0nN0O5tuOvbEs65/view?usp=drive_link)**
-#
+    #
+    # #### 🎬 MovieLens Dataset
+    # In this notebook we will use the MovieLens Dataset as an example.
+    #
+    # GroupLens Research has collected and made available rating data sets from the MovieLens web site (https://movielens.org). This dataset describes 5-star rating and free-text tagging activity from MovieLens, a movie recommendation service.
+    #
+    # **Download the MovieLens dataset from RecBole: [MovieLens Dataset (RecBole processed)](https://drive.google.com/file/d/1G7_XhdSi1BhIvRETg0nN0O5tuOvbEs65/view?usp=drive_link)**
+    #
 
-# In[ ]:
 
-# #### **Step 2:** Place the dataset files under `~/recommendation/dataset/LastFM`
-#
-# We rename the downloaded files to match the RecBole format. The directory structure should look like this:
-#
-# ```text
-# fairdiverse
-# └── recommendation
-#         └── dataset
-#             └── LastFM
-#                 ├── artists.dat -> LastFM.item
-#                 ├── user_artists.dat -> LastFM.inter
-#                 ├── user_taggedartists-timestamps.dat -> LastFM.user
+    # #### **Step 2:** Place the dataset files under `~/recommendation/dataset/LastFM`
+    #
+    # We rename the downloaded files to match the RecBole format. The directory structure should look like this:
+    #
+    # ```text
+    # fairdiverse
+    # └── recommendation
+    #         └── dataset
+    #             └── LastFM
+    #                 ├── artists.dat -> LastFM.item
+    #                 ├── user_artists.dat -> LastFM.inter
+    #                 ├── user_taggedartists-timestamps.dat -> LastFM.user
 
-# Rename LastFM dataset files to match RecBole format
+    # Rename LastFM dataset files to match RecBole format
     os.rename("recommendation/dataset/LastFM/artists.dat", "recommendation/dataset/LastFM/LastFM.item")
     os.rename("recommendation/dataset/LastFM/user_artists.dat", "recommendation/dataset/LastFM/LastFM.inter")
     os.rename("recommendation/dataset/LastFM/user_taggedartists-timestamps.dat", "recommendation/dataset/LastFM/LastFM.user")
 
 
-# In[ ]:
     data_path = f"recommendation/dataset/{dataset_name}"
     os.makedirs(data_path, exist_ok=True)
-# move the dataset files in the folder
+    # move the dataset files in the folder
 
 
-# #### Dataset Content 📁
+    # #### Dataset Content 📁
 
-# ---
-# **User Data**
-#
-# The file user_taggedartists-timestamps.dat comprising the attributes of the user tagged artists.
-#
-# Each record/line in the file has the following fields:
-#
-# - `userID`: the id of the users.
-# - `artistID`: the id of the artists.
-# - `tagID`: the id of the tags.
-# - `timestamp`: the timestamp of the user interaction.
-#
-# ---
-
-# In[ ]:
-
-
+    # ---
+    # **User Data**
+    #
+    # The file user_taggedartists-timestamps.dat comprising the attributes of the user tagged artists.
+    #
+    # Each record/line in the file has the following fields:
+    #
+    # - `userID`: the id of the users.
+    # - `artistID`: the id of the artists.
+    # - `tagID`: the id of the tags.
+    # - `timestamp`: the timestamp of the user interaction.
+    #
+    # ---
     user_path = os.path.join(data_path, f"{dataset_name}.user")
     user_data = pd.read_csv(user_path,delimiter='\t')
 
+    num_users = user_data["userID"].nunique()
     print(f"Data Sample")
     print(user_data.head())
-
-
-    # In[ ]:
-
-
-    num_users = user_data["userID"].nunique()
     print(f"Total Users: {num_users}")
 
 
@@ -182,8 +173,11 @@ if not os.path.exists('recommendation/dataset/LastFM'):
 
     # Add the first tagID from the user data at the end of the item data where the artistID matches
     item_data = item_data.merge(user_data[['artistID', 'tagID']], on='artistID', how='left')
+
     # Convert tagID to int
-    item_data['tagID'] = item_data['tagID'].dropna().astype(int)
+    item_data['tagID'] = item_data['tagID'].fillna(0).astype(int)
+    # Keep only the first tagID for each artistID
+    item_data = item_data.drop_duplicates(subset=['artistID'])
 
     print(item_data.head())
 
@@ -426,15 +420,19 @@ with open(f"./recommendation/train-base-model.yaml", "w") as file:
 # #### **Step 2: Run the Base Recommender System**
 
 # In[ ]:
-subprocess.run([
-    "python",
-    "main.py",
-    "--task", "recommendation",
-    "--stage", "in-processing",
-    "--dataset", dataset_name,
-    "--train_config_file", "train-base-model.yaml"
-], check=True)
 
+# YOU MIGHT HAVE TO RUN THIS CELL IN THE TERMINAL FOR BETTER PERFORMANCE
+# python main.py --task recommendation --stage in-processing --dataset LastFM --train_config_file train-base-model.yaml
+# Capture stdout and stderr by setting capture_output=True or using pipes
+if False:
+    subprocess.run([
+        "python",
+        "main.py",
+        "--task", "recommendation",
+        "--stage", "in-processing",
+        "--dataset", dataset_name,
+        "--train_config_file", "train-base-model.yaml"
+    ], check=True)
 
 # #### **Output files**
 # ---
@@ -540,15 +538,17 @@ with open(f"./recommendation/postprocessing_with_fairdiverse.yaml", "w") as file
 
 # In[ ]:
 
-
-subprocess.run([
-    "python",
-    "main.py",
-    "--task", "recommendation",
-    "--stage", "post-processing",
-    "--dataset", dataset_name,
-    "--train_config_file", "postprocessing_with_fairdiverse.yaml"
-], check=True)
+# YOU MIGHT HAVE TO RUN THIS CELL IN THE TERMINAL FOR BETTER PERFORMANCE
+# python main.py --task recommendation --stage post-processing --dataset LastFM --train_config_file postprocessing_with_fairdiverse.yaml
+if False:
+    subprocess.run([
+        "python",
+        "main.py",
+        "--task", "recommendation",
+        "--stage", "post-processing",
+        "--dataset", dataset_name,
+        "--train_config_file", "postprocessing_with_fairdiverse.yaml"
+    ], check=True)
 
 
 # **Evaluation Results📈**
@@ -605,364 +605,3 @@ print_evaluation_results(base_model_name, dataset_name)
 
 
 # #### ✅ CP-Fair improves fairness and diversity metrics over the base model SASRec, with only a small drop in NDCG and utility loss.
-
-# #### **3.2 Withoout Input from FairDiverse**
-#
-# ---
-#
-
-# To simulate a scenario where you did not use FairDiverse to generate the required files let's rename the already generated folder.
-
-# In[ ]:
-
-
-os.rename(f"recommendation/processed_dataset/{dataset_name}", f"recommendation/processed_dataset/{dataset_name}_fairdiverse")
-
-
-# **Expected Data Format**
-#
-# If you want to use a model not supported by FairDiverse and run the evaluation metrics you need to have the following files:
-#
-# (1) `iid2pid.json` - Mapping from item ID to provider/group ID
-#
-# (2) `ranking_scores.npz` - Numpy array of ranking scores
-#
-# Otherwise use one of the Base Models or In-processing models supported by FairDiverse to generate those files.
-
-# In[ ]:
-
-
-# (1) Example of expected format for iid2pid.json file -- item_id:group_id
-iid2pid = {"1488": "0", "42": "1", "2508": "2", "1084": "3", "1182": "0", "1468": "4", "2087": "3", "153": "0"}
-
-
-# In[ ]:
-
-
-# (2) Example of expected format for ranking_scores.npz file -- sparse matrix of users x items and the corresponding score
-
-n_users = 50
-n_items = 100
-user_item_matrix = np.random.rand(n_users, n_items)
-print(user_item_matrix)
-print("Shape:", user_item_matrix.shape)
-
-
-# #### **Step 1:** Create the files needed for running the post-processing method.
-#
-# To simulate a scenarion where you did not use FairDiverse to create the files, take the files generated by the previous base model (e.g. SASRec) and follow the steps below.
-
-# #### **Step 2:** Place `ranking_scores.npz` under `~/recommendation/log/{dataset_name}`
-#
-# ```text
-# fairdiverse
-# └── recommendation
-#     └──log/
-#         └── {dataset_name}/
-#             ├── ranking_scores.npz     # Numpy array of ranking scores
-#
-# ```
-# #### **Step 3:** Place `iid2pid.json` under `~/recommendation/processed_dataset/{dataset_name}`
-# ```text
-# fairdiverse
-# └── recommendation
-#     └──processed_dataset/
-#         └── {dataset_name}/
-#             ├── iid2pid.json    # Mapping from item ID to provider/group ID
-# ```
-
-# #### **Step 4:** Save data configuration file `process_config.yaml` under `~/recommendation/processed_dataset/{dataset_name}`
-# ```text
-# fairdiverse
-# └── recommendation
-#     └──processed_dataset/
-#         └── {dataset_name}/
-#             ├── process_config.yaml
-# ```
-
-# In[ ]:
-
-
-os.makedirs(f"recommendation/log/{dataset_name}", exist_ok=True)
-os.makedirs(f"recommendation/processed_dataset/{dataset_name}", exist_ok=True)
-
-
-# In[ ]:
-
-
-# run this if you did not use FairDiverse to create the score file
-num_users = 822 # n rows of the matrix
-num_items = 1345 # n columns of the matrix
-num_groups = 14 # this should correspond to the unique values from iid2pid.json
-config_data["item_num"] = num_items
-config_data["user_num"] = num_users
-config_data["group_num"] = num_groups
-
-print(config_data)
-with open(f"recommendation/processed_dataset/{dataset_name}/process_config.yaml", "w") as file:
-    yaml.dump(config_data, file, sort_keys=False)
-
-
-# #### **Step 5:** Create a configuration file for running a post-processing intervention under
-# You can change parameters specific to each model in the following configuration file: `recommendation/properties/models/<model_name>.yaml`
-# ```yaml
-# {
-#    ###############the ranking score stored path for the post-processing##################
-#    ranking_store_path: "{dataset_name}",
-#    #######################################################################################
-#
-#    ### !!! Don't change - needs to be set to False as we don't run a post-processing intervention !!!
-#    model: "CPFair",
-#    log_name: "CPFair_{dataset_name}",
-#
-#    #########################Evaluation parameters#########################################
-#    topk: [5, 10, 20],
-#    fairness_metrics: ['MinMaxRatio', "MMF", "GINI", "Entropy"],
-#    fairness_type: "Exposure", # ["Exposure", "Utility"], where Exposure only computes the exposure of item group while utility computes the ranking score of item groups
-#    #####################################################################################
-# }
-# ```
-
-# In[ ]:
-
-
-postprocessing_model_name = "CPFair"
-
-config_model = {
-    "ranking_store_path": f"{dataset_name}",  # Path to the ranking score file (required for post-processing)
-
-    # Change to any of the supported post-processing methods in Fairdiverse
-    "model": f"{postprocessing_model_name}",
-    "fair-rank": True,
-
-    "log_name": f"{postprocessing_model_name}_without_fairdiverse_{dataset_name}", # path to save the evaluation and the output
-
-    # Evaluation parameters
-    "topk": [5, 10, 20],
-    "fairness_metrics": ["MinMaxRatio", "MMF", "GINI", "Entropy"],
-    "fairness_type": "Exposure"  # "Exposure" computes exposure of item group; "Utility" computes score differences
-}
-
-with open(f"./recommendation/postprocessing_without_fairdiverse.yaml", "w") as file:
-    yaml.dump(config_model, file, sort_keys=False)
-
-
-# #### **Step 6:** Run the post-processing model
-
-# In[ ]:
-
-
-subprocess.run([
-    "python",
-    "main.py",
-    "--task", "recommendation",
-    "--stage", "post-processing",
-    "--dataset", dataset_name,
-    "--train_config_file", "postprocessing_without_fairdiverse.yaml"
-], check=True)
-
-
-# ##### **Evaluation Results 📈**
-#
-# ---
-
-# ### NDCG as a Measure of Utility Loss
-#
-# Here, **Normalized Discounted Cumulative Gain (NDCG)** is used to quantify the **loss in utility** resulting from the post-processing intervention.
-#
-# Specifically, it compares the ranking produced by **CP-Fair** with the original ranking of the **base model** (e.g., *SASRec*).
-#
-# The formula is:
-#
-# $$
-# \text{Mean\_NDCG@k} = \frac{1}{|U|} \sum_{u \in U} \frac{DCG_u}{IDCG_u}
-# $$
-#
-# Where:
-# -  *U* is the set of users,
-# - **DCG** is computed based on the ranking produced by the post-processing intervention (e.g. CP-Fair),
-# - **Ideal DCG** is computed based on the original ranking produced by the base model (e.g. SASRec).
-#
-# An NDCG closer to 1 indicates minimal loss in utility due to the intervention.
-
-# ### Mean Utility Loss
-#
-# The **mean utility loss at rank k** across all users is defined as:
-#
-# $$
-# U_{loss@k} = \frac{1}{|U|} \sum_{u \in U} \left[ \frac{1}{k} \left( \sum_{i=1}^{k} \text{score}_{base} {(u,i)} - \sum_{i=1}^{k} \text{score}_{post} {(u,i)} \right) \right]
-# $$
-#
-# Where:
-# - *U* is the set of users,
-# - $ \text{score}_{base} {(u,i)} $  is the score assigned to the *i-th* item in the **base model's** top-*k* ranking for user *u*,
-# - $ \text{score}_{post} {(u,i)} $ is the score of the *i-th* item in the **post-processing model's** top-*k* ranking for user *u*.
-#
-# This metric captures the **average per-item utility loss over all users**, reflecting how much the re-ranking procedure deviates from the base model in terms of utility.
-#
-
-# In[ ]:
-
-
-print_evaluation_results(postprocessing_model_name, dataset_name)
-
-
-# In[ ]:
-
-
-print_evaluation_results(base_model_name, dataset_name)
-
-
-# ## **4. Run Evaluation 📈**
-#
-# ---
-#
-# If you want to use a model not supported by FairDiverse and run the evaluation metrics you need to have the following files:
-#
-# (1) `iid2pid.json` - Mapping from item ID to provider/group ID
-#
-# (2) `ranking_scores.npz` - Numpy array of ranking scores
-#
-# To simulate a scenario where you did not use FairDiverse to generate the required files let's rename the already generated folder for the base model, and run again only the evaluation.
-#
-
-# In[ ]:
-
-
-# no need to run if you did this in Section 3.1
-# os.rename("recommendation/processed_dataset/{dataset_name}", "recommendation/processed_dataset/{dataset_name}_fairdiverse")
-
-
-# In[ ]:
-
-
-# (1) Example of expected format for iid2pid.json file -- item_id:group_id
-iid2pid = {"1488": "0", "42": "1", "2508": "2", "1084": "3", "1182": "0", "1468": "4", "2087": "3", "153": "0"}
-
-
-# In[ ]:
-
-
-# (2) Example of expected format for ranking_scores.npz file -- sparse matrix of users x items and the corresponding score
-
-users = 50
-items = 100
-user_item_matrix = np.random.rand(users, items)
-print(user_item_matrix)
-print("Shape:", user_item_matrix.shape)
-
-
-# #### **Step 1:** Create the files needed for running the evaluation
-#
-# To simulate a scenarion where you did not use FairDiverse to create the files, take the files generated by the previous base model (e.g. SASRec) and follow the steps below.
-# #### **Step 2:** Place `ranking_scores.npz` under `~/recommendation/log/SASRec_{dataset_name}`
-#
-# ```text
-# fairdiverse
-# └── recommendation
-#     └──log/
-#         └── {dataset_name}/
-#             ├── ranking_scores.npz     # Numpy array of ranking scores
-#
-# ```
-# #### **Step 3:** Place `iid2pid.json` under `~/recommendation/processed_dataset/{dataset_name}`
-# ```text
-# fairdiverse
-# └── recommendation
-#     └──processed_dataset/
-#         └── {dataset_name}/
-#             ├── iid2pid.json    # Mapping from item ID to provider/group ID
-# ```
-#
-#
-# #### **Step 4:** Save data configuration file `process_config.yaml` under `~/recommendation/processed_dataset/{dataset_name}`
-# ```text
-# fairdiverse
-# └── recommendation
-#     └──processed_dataset/
-#         └── {dataset_name}/
-#             ├── process_config.yaml
-# ```
-
-# In[ ]:
-
-
-os.makedirs(f"recommendation/log/{base_model_name}_{dataset_name}", exist_ok=True)
-os.makedirs(f"recommendation/processed_dataset/{dataset_name}", exist_ok=True)
-
-
-# In[ ]:
-
-
-# run this if you did not use FairDiverse to create the score file
-num_users = 822 # n rows of the matrix
-num_items = 1345 # n columns of the matrix
-num_groups = 14 # this should correspond to the unique values from iid2pid.json
-config_data["item_num"] = num_items
-config_data["user_num"] = num_users
-config_data["group_num"] = num_groups
-
-print(config_data)
-with open(f"recommendation/processed_dataset/{dataset_name}/process_config.yaml", "w") as file:
-    yaml.dump(config_data, file, sort_keys=False)
-
-
-# #### **Step 5:** Create a configuration file for the evaluation
-# ```yaml
-# {
-#    ###############the ranking score stored path for the post-processing##################
-#    ranking_store_path: "SASRec_{dataset_name}",
-#    #######################################################################################
-#
-#    ### !!! Don't change - needs to be set to False as we don't run a post-processing intervention !!!
-#    model: False,
-#    use_llm: False,
-#    ###############eval output path##################
-#    log_name: "eval_{dataset_name}",
-#
-#    #########################Evaluation parameters#########################################
-#    topk: [5, 10, 20],
-#    fairness_metrics: ['MinMaxRatio', "MMF", "GINI", "Entropy"],
-#    fairness_type: "Exposure", # ["Exposure", "Utility"], where Exposure only computes the exposure of item group while utility computes the ranking score of item groups
-#    #####################################################################################
-# }
-
-# In[ ]:
-
-
-config_eval = {
-    "ranking_store_path": f"{base_model_name}_{dataset_name}",  # Path to the ranking score file (required for post-processing)
-
-    # Do not change — no post-processing model used, and no base model used as we want to just perform evaluation
-    "fair-rank": False,
-    # output file for evaluation results
-    "log_name": f"eval_{base_model_name}_without_fairdiverse_{dataset_name}", # path to save the evaluation
-
-    # Evaluation parameters
-    "topk": [5, 10, 20],
-    "fairness_metrics": ["MinMaxRatio", "MMF", "GINI", "Entropy"],
-    "fairness_type": "Exposure"  # "Exposure" computes exposure of item group; "Utility" computes score differences
-}
-
-
-with open(f"./recommendation/evaluation.yaml", "w") as file:
-    yaml.dump(config_eval, file, sort_keys=False)
-
-
-# #### **Step 6:** Run the evaluation
-
-# In[ ]:
-
-
-subprocess.run(["python", "main.py", "--task", "recommendation", "--stage", "post-processing",
-                "--dataset", dataset_name, "--train_config_file", "evaluation.yaml"], check=True)
-
-
-# ##### **Evaluation Results📈**
-#
-# ---
-
-# In[ ]:
-
-
-print_evaluation_results(f"eval_{base_model_name}_without_fairdiverse", dataset_name)
