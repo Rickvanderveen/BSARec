@@ -23,7 +23,8 @@ python main.py \
   --num_attention_heads 4 \
   --train_name DuoRec_Diginetica \
   --model_type DuoRec \
-  --data_dir data/self_processed/
+  --data_dir data/self_processed/ \
+  --seed 46
 
 # Evaluate which also saves the predictions
 python main.py \

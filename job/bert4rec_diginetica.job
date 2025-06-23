@@ -24,7 +24,8 @@ python main.py \
   --mask_ratio 0.2 \
   --train_name BERT4Rec_Diginetica \
   --model_type BERT4Rec \
-  --data_dir data/self_processed/
+  --data_dir data/self_processed/ \
+  --seed 43
 
 # Evaluate which also saves the predictions
 python main.py \

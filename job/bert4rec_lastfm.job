@@ -24,7 +24,8 @@ python main.py \
   --mask_ratio 0.4 \
   --train_name BERT4Rec_LastFM \
   --model_type BERT4Rec \
-  --data_dir data/
+  --data_dir data/ \
+  --seed 43
 
 # Evaluate which also saves the predictions
 python main.py \

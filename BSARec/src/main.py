@@ -77,6 +77,17 @@ def main():
 
         logger.info(f"Saved predictions in `{pred_path}`")
 
+    elif args.do_val_eval:
+        if args.load_model is None:
+            logger.error("No model input!")
+            exit(0)
+
+        args.checkpoint_path = os.path.join(args.output_dir, args.load_model + ".pt")
+        trainer.load(args.checkpoint_path)
+
+        logger.info(f"Load model from {args.checkpoint_path} for validations!")
+        scores, result_info, predictions = trainer.valid(0)
+
     else:
         early_stopping = EarlyStopping(
             args.checkpoint_path, logger=logger, patience=args.patience, verbose=True

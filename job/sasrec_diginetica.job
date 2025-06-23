@@ -23,7 +23,8 @@ python main.py \
   --num_attention_heads 1 \
   --train_name SASRec_Diginetica \
   --model_type SASRec \
-  --data_dir data/self_processed/
+  --data_dir data/self_processed/ \
+  --seed 43
 
 # Evaluate which also saves the predictions
 python main.py \

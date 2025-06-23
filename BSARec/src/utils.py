@@ -57,6 +57,7 @@ def parse_args():
     parser.add_argument("--data_dir", default="./data/", type=str)
     parser.add_argument("--output_dir", default="output/", type=str)
     parser.add_argument("--data_name", default="Beauty", type=str)
+    parser.add_argument("--do_val_eval", action="store_true")
     parser.add_argument("--do_eval", action="store_true")
     parser.add_argument("--load_model", default=None, type=str)
     parser.add_argument("--train_name", default=get_local_time(), type=str)
