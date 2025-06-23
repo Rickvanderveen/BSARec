@@ -196,7 +196,6 @@ class Ranking_Evaluator(Abstract_Evaluator):
         for key in result_dict.keys():
             result_dict[key] = np.round(result_dict[key]/index, self.config['decimals'])
 
-        # print(len(row), len(col), len(data), index, self.config['item_num'])
         if store_scores == False:
             return result_dict
         else:
