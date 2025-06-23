@@ -20,7 +20,7 @@ entropy      1.0672  1.2457  1.2185
 maxminratio  0.0000  0.0000  0.0000
 
 
-BSARec post-processing(CPFair)
+BSARec post-processing (CPFair)
                  @5     @10     @20
 ndcg         0.9946  0.9962  0.9956
 u_loss       0.0102  0.0085  0.0094

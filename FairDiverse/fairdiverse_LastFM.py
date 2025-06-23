@@ -433,7 +433,7 @@ with open(f"{model_path}/{base_model_name}_{dataset_name}.txt", "w") as file_han
     print_evaluation_results(config_inproc['log_name'], dataset_name, f"{base_model_name} in-processing ({inprocessing_model_name})", file_handle)
 
     # evaluation results of post-processing model
-    print_evaluation_results(config_postproc['log_name'], dataset_name, f"{base_model_name} post-processing({postprocessing_model_name})", file_handle)
+    print_evaluation_results(config_postproc['log_name'], dataset_name, f"{base_model_name} post-processing ({postprocessing_model_name})", file_handle)
 
 
 
