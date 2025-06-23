@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1
 #SBATCH --gpus=1
 #SBATCH --partition=gpu_a100
-#SBATCH --time=03:00:00
+#SBATCH --time=01:00:00
 #SBATCH --out=logs/%j.out
 
 model=$1
