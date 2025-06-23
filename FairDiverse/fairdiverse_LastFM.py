@@ -14,6 +14,7 @@ import yaml
 import os
 import subprocess
 import re
+from pathlib import Path
 
 
 # In[ ]:
@@ -32,13 +33,13 @@ os.makedirs("recommendation/dataset", exist_ok=True)
 # In[ ]:
 
 
-def print_evaluation_results(model_name, dataset_name, title=None):
+def print_evaluation_results(model_name, dataset_name, title, file_handle):
     if dataset_name !="":
         today = date.today()
         today_format = f"{today.year}-{today.month}-{today.day}"
 
         # read evaluation file
-        evaluation_file = f"recommendation/log/{today_format}_{model_name}_{dataset_name}/test_result.json"
+        evaluation_file = f"recommendation/log/{today_format}_{model_name}/test_result.json"
 
     else:
         evaluation_file = f"recommendation/log/{model_name}/test_result.json"
@@ -56,9 +57,11 @@ def print_evaluation_results(model_name, dataset_name, title=None):
     df = pd.DataFrame(table).T
     df = df[sorted(df.columns, key=lambda x: int(x[1:]))]
 
-    if title:
-        print(f"{title}")
+    print(f"{title}")
     print(df)
+    print(f"{title}", file=file_handle)
+    print(df, file=file_handle)
+    print("\n", file=file_handle)
 
 
 # # 🧰 FairDiverse Tutorial
@@ -166,8 +169,6 @@ else:
 #
 # ---
 
-# In[ ]:
-
 
     item_path = os.path.join(data_path, f"{dataset_name}.item")
     item_data = pd.read_csv(item_path, delimiter='\t', encoding='latin-1')
@@ -181,17 +182,10 @@ else:
     # Keep only the first tagID for each artistID
     item_data = item_data.drop_duplicates(subset=['artistID'])
 
-    print(item_data.head())
-
-
-# In[ ]:
-
-
     num_items = item_data["artistID"].nunique()
+    print(item_data.head())
     print(f"Total Items: {num_items}")
 
-
-# In[ ]:
     # save item_data
     item_data.to_csv(item_path,sep='\t', index=False)
 
@@ -208,8 +202,6 @@ else:
 # - `artistID`: the id of the artists.
 # - `weight`: the weight of the user interaction with the artist.
 # ---
-
-# In[ ]:
     interaction_path = os.path.join(data_path, f"{dataset_name}.inter")
     interaction_data = pd.read_csv(interaction_path,delimiter='\t')
 
@@ -226,48 +218,14 @@ else:
     interaction_data['timestamp'] = interaction_data['timestamp'].astype(int)
 
     print(interaction_data.head())
-
-
-# In[ ]:
     print("Number of items interacted with: ", len(interaction_data["artistID"].unique()))
     print("Number of users who performed an interaction: ", len(interaction_data["userID"].unique()))
 
-
-# In[ ]:
     # Distirbution of ratings
     interaction_data.groupby("weight").size().reset_index()
-
-
-# In[ ]:
     # save interaction_data
     interaction_data.to_csv(interaction_path, sep='\t', index=False)
 
-
-# #### **Step 3:** Create a configuration file for the dataset under `~/recommendation/properties/dataset{dataset_name}.yaml`
-#
-# ```yaml
-# {
-#     user_id: user_id:token, # column name of the user ID
-#     item_id: item_id:token, # column name of the item ID, in this case we recommend movies
-#     group_id: first_class:token, # column name of the groups to be considered for fairness, in this case we consider the genres of the movie
-#     label_id: rating:float, # column name for the label, indicating the interest of the user in the item
-#     timestamp: timestamp:float, # column name for the timestamp of when the interaction happened
-#     text_id: movie_title:token_seq, # column name for the text ID of the item (e.g. movie name, book title)
-#     label_threshold: 3, # if label exceed the value will be regarded as 1, otherwise, it will be accounted into 0 --> we consider a positive recommendation if a user rated a movie with a value higher than 3
-#     item_domain: movie, # description of the dataset domain (e.g. movie, music, jobs etc.)
-#
-#    item_val: 5, # keep items which have at least this number of interactions
-#    user_val: 5, # keep users who have at least this number of interactions
-#    group_val: 5, # keep groups which have at least this number of interactions
-#    group_aggregation_threshold: 15, ##If the number of items owned by a group is less than this value, those groups will be merged into a single group called the 'infrequent group'. For example, Fantasy, War, Musician, ... will be merged into one group called 'infrequent group', as the number of items belonging to this group is under the threshold.
-#    sample_size: 1.0, ###Sample ratio of the whole dataset to form a new subset dataset for training.
-#    valid_ratio: 0.1, ### Samples to be used for validation
-#    test_ratio: 0.1, ### Samples to be used for test
-#    reprocess: True, ##do you need to re-process the dataset according to your personalized requirements
-#    sample_num: 300, # needs to be higher than the max number of positive samples per user
-#    history_length: 20, # length of historical interactions of a user - [item_1, item_2, item_3, ...] to be considered
-# }
-# ```
 
 # In[ ]:
 
@@ -319,66 +277,15 @@ with open("main.py", "r") as f:
 with open("main.py", "w") as f:
     f.writelines(data)
 
-# In[ ]:
-# ## **2. Base Recommender System**
-#
-# ---
-
-# To check that the set-up of the new dataset works well, let's train a base recommender system!
-
-# #### **Step 1:** Define your training configuration file: `~/recommendation/train-base-model.yaml`
-#
-# You can change parameters specific to each model in the following configuration file: `recommendation/properties/models/<model_name>.yaml`
-#
-# ```yaml
-# {
-#    ############base model#########################
-#    model: SASRec, # define the model to train
-#    data_type: 'sequential', #[point, pair, sequential] # define the data_type needed by the model during training SASRec is a sequnetial recommender system, expecting the data_type to be 'sequential'
-#    #############################################################
-#
-#    ##Should the preprocessing be redone based on the new parameters instead of using the cached files in ~/recommendation/process_dataset######
-#    reprocess: True,
-#    ###############################################
-#
-#   ####fair-rank model settings --> set all to False as we want to only train the base model without any fairness/diversity intervention
-#    fair-rank: False, ##if you want to run a fair-rank module on the base models, you should set the value as True
-#
-#   # LLM recommendation setting
-#    use_llm: False,
-#
-#   #############log name, it will store the evaluation result in ~log/your_log_name/
-#    log_name: f"SASRec_{dataset_name}",
-#   #################################################
-#
-#    ###########################training parameters################################
-#    device: cpu,
-#    epoch: 20,
-#    batch_size: 64,
-#    learning_rate: 0.001,
-#    ###########################################################################
-#
-#
-#    ###################################evaluation parameters: overwrite from ~/properties/evaluation.yaml######################################
-#    mmf_eval_ratio: 0.5,
-#    decimals: 4,
-#    eval_step: 5,
-#    eval_type: 'ranking',
-#    watch_metric: 'mmf@20',
-#    topk: [ 5,10,20 ], # if you choose the ranking settings, you can choose your top-k list
-#    store_scores: True, #If set true, the all relevance scores will be stored in the ~/log/your_name/ for post-processing
-#    fairness_metrics: ['MinMaxRatio', "MMF", "GINI", "Entropy"],
-#    fairness_type: "Exposure", # ["Exposure", "Utility"], where Exposure only computes the exposure of item group while utility computes the ranking score of item groups
-#    ###########################################################################
-# }
-# ```
 
 # In[ ]:
-
+# ============================================================================
+#    Base Model without in-processing (no fairness/diversity intervention)
+# ============================================================================
 
 # Experiment with the baselines models provided by FairDiverse
 base_model_name = "BSARec"
-inprocessing_model_name = "FOCF"
+
 config_base = {
     # ############ base model #########################
     "model": f"{base_model_name}",
@@ -388,11 +295,8 @@ config_base = {
     "reprocess": True,
 
     # Fair-rank settings !!! eeds to be set to False for running the base model !!!
-    # Set to True to apply fairness/diversity intervention
+    # Set to True to apply fairness/diversity intervention. This is done below.
     "fair-rank": False,  # run fair-rank module or not
-    # Only does something if 'fair-rank' is True.
-    # in-processing model to be used for ranking
-    "rank_model": inprocessing_model_name,
 
     # LLM recommendation setting !!! Don't change - needs to be set to False for running the base model !!!
     "use_llm": False,
@@ -418,105 +322,40 @@ config_base = {
     "fairness_type": "Exposure"  # ["Exposure", "Utility"]
 }
 
-with open(f"./recommendation/inprocessing.yaml", "w") as file:
+config_base_file = Path(f"./recommendation/{base_model_name}_base.yaml")
+with open(config_base_file, "w") as file:
     yaml.dump(config_base, file, sort_keys=False)
 
+# In[ ]:
+# ============================================================================
+#    Model with in-processing (FOCF)
+# ============================================================================
+inprocessing_model_name = "FOCF"
 
-# #### **Step 2: Run the Base Recommender System**
+config_inproc = config_base.copy()
+config_inproc["rank_model"] = inprocessing_model_name
+config_inproc["fair-rank"] = True  # run fair-rank module or not
+config_inproc["log_name"] = f"{base_model_name}_{inprocessing_model_name}_{dataset_name}"
+
+config_inproc_file = Path(f"./recommendation/{base_model_name}_inprocessing.yaml")
+with open(config_inproc_file, "w") as file:
+    yaml.dump(config_inproc, file, sort_keys=False)
 
 # In[ ]:
-use_subprocess = False
-
-# YOU MIGHT HAVE TO RUN THIS CELL IN THE TERMINAL FOR BETTER PERFORMANCE
-# python main.py --task recommendation --stage in-processing --dataset LastFM --train_config_file inprocessing.yaml
-# Capture stdout and stderr by setting capture_output=True or using pipes
-if use_subprocess:
-    subprocess.run([
-        "python",
-        "main.py",
-        "--task", "recommendation",
-        "--stage", "in-processing",
-        "--dataset", dataset_name,
-        "--train_config_file", "inprocessing.yaml"
-    ], check=True)
-
-# #### **Output files**
-# ---
-#
-# **Processed Dataset Structure**
-#
-# The following files are generated during preprocessing and saved under `processed_dataset/{dataset_name}/`:
-#
-# ```text
-# fairdiverse
-# └── recommendation
-#     └──processed_dataset/
-#         └── {dataset_name}/
-#             ├── iid2pid.json              # Mapping from item ID to provider/group ID
-#             ├── iid2text.json             # Mapping from item ID to textual representation (e.g., title)
-#             ├── movie_lens.test.CTR       # Test set for click-through rate (CTR) evaluation
-#             ├── movie_lens.test.ranking   # Test set for ranking evaluation
-#             ├── movie_lens.train          # Training set
-#             ├── movie_lens.valid.CTR      # Validation set for CTR evaluation
-#             ├── movie_lens.valid.ranking  # Validation set for ranking evaluation
-#             └── process_config.yaml       # Configuration used during preprocessing
-# ```
-# **Log Output Directory Structure**
-#
-# After training, the following files are saved under the `log/` directory:
-# ```text
-# fairdiverse
-# └── recommendation
-#     └──log/
-#         └── 2025-5-20_SASRec_{dataset_name}/
-#             ├── best_model.pth         # Saved PyTorch model weights
-#             ├── config.yaml            # Configuration used for training
-#             ├── ranking_scores.npz     # Numpy array of ranking scores
-#             └── test_result.json       # Evaluation metrics
-
-# ## **3. Run Post-processing Model**
-#
-# ---
-
-# #### **3.1 With Input from FairDiverse**
-#
-# ---
-#
-# Run the post-processing model on-top of the base recommender system that we have trained in Section 2.
-
-# #### **Step 1:** Create a configuration file for running a post-processing intervention under
-# You can change parameters specific to each model in the following configuration file: `recommendation/properties/models/<model_name>.yaml`
-# ```yaml
-# {
-#    ###############the ranking score stored path for the post-processing##################
-#    ranking_store_path: {dataset_name},
-#    #######################################################################################
-#
-#    ### !!! Don't change - needs to be set to False as we don't run a post-processing intervention !!!
-#    model: "CPFair",
-#    log_name: f"CPFair_{dataset_name}",
-#
-#    #########################Evaluation parameters#########################################
-#    topk: [5, 10, 20],
-#    fairness_metrics: ['MinMaxRatio', "MMF", "GINI", "Entropy"],
-#    fairness_type: "Exposure", # ["Exposure", "Utility"], where Exposure only computes the exposure of item group while utility computes the ranking score of item groups
-#    #####################################################################################
-# }
-# ```
-
-# In[ ]:
-
+# ============================================================================
+#    Post-processing model (CP-Fair)
+# ============================================================================
 
 postprocessing_model_name = "CPFair"
 today = date.today()
 today_format = f"{today.year}-{today.month}-{today.day}"
 
-config_model = {
+config_postproc = {
     "ranking_store_path": f"{today_format}_{base_model_name}_{dataset_name}",  # Path to the ranking score file (required for post-processing)
 
     # Change to any of the supported post-processing methods in Fairdiverse
     "model": f"{postprocessing_model_name}",
-     "fair-rank": True,
+    "fair-rank": True,
 
     "log_name": f"{postprocessing_model_name}_{dataset_name}", # path to save the evaluation and the output
 
@@ -526,74 +365,77 @@ config_model = {
     "fairness_type": "Exposure"  # "Exposure" computes exposure of item group; "Utility" computes score differences
 }
 
-with open(f"./recommendation/postprocessing.yaml", "w") as file:
-    yaml.dump(config_model, file, sort_keys=False)
+config_postproc_file = Path(f"./recommendation/{base_model_name}_postprocessing.yaml")
+with open(config_postproc_file, "w") as file:
+    yaml.dump(config_postproc, file, sort_keys=False)
 
-
-# **Step 2: Run the post-processing model**
 
 # In[ ]:
+# ============================================================================
+#    Running models
+#    Setting `use_subprocess` to True will probably be slower
+# ============================================================================
+# Set this to True if you want to run the commands in a subprocess, otherwise it will just print the command
+use_subprocess = False
 
-# YOU MIGHT HAVE TO RUN THIS CELL IN THE TERMINAL FOR BETTER PERFORMANCE
-# python main.py --task recommendation --stage post-processing --dataset LastFM --train_config_file postprocessing.yaml
+# In[ ]:
+base_command = [
+    "python",
+    "main.py",
+    "--task", "recommendation",
+    "--stage", "in-processing",
+    "--dataset", dataset_name,
+    "--train_config_file", config_base_file.name
+]
 if use_subprocess:
-    subprocess.run([
-        "python",
-        "main.py",
-        "--task", "recommendation",
-        "--stage", "post-processing",
-        "--dataset", dataset_name,
-        "--train_config_file", "postprocessing.yaml"
-    ], check=True)
-
-
-# **Evaluation Results📈**
-#
-# ---
-
-# ### NDCG as a Measure of Utility Loss
-#
-# Here, **Normalized Discounted Cumulative Gain (NDCG)** is used to quantify the **loss in utility** resulting from the post-processing intervention.
-#
-# Specifically, it compares the ranking produced by **CP-Fair** with the original ranking of the **base model** (e.g., *SASRec*).
-#
-# The formula is:
-#
-# $$
-# \text{Mean\_NDCG@k} = \frac{1}{|U|} \sum_{u \in U} \frac{DCG_u}{IDCG_u}
-# $$
-#
-# Where:
-# -  *U* is the set of users,
-# - **DCG** is computed based on the ranking produced by the post-processing intervention (e.g. CP-Fair),
-# - **Ideal DCG** is computed based on the original ranking produced by the base model (e.g. SASRec).
-#
-# An NDCG closer to 1 indicates minimal loss in utility due to the intervention.
-
-# ### Mean Utility Loss
-#
-# The **mean utility loss at rank k** across all users is defined as:
-#
-# $$
-# U_{loss@k} = \frac{1}{|U|} \sum_{u \in U} \left[ \frac{1}{k} \left( \sum_{i=1}^{k} \text{score}_{base} {(u,i)} - \sum_{i=1}^{k} \text{score}_{post} {(u,i)} \right) \right]
-# $$
-#
-# Where:
-# - *U* is the set of users,
-# - $ \text{score}_{base} {(u,i)} $  is the score assigned to the *i-th* item in the **base model's** top-*k* ranking for user *u*,
-# - $ \text{score}_{post} {(u,i)} $ is the score of the *i-th* item in the **post-processing model's** top-*k* ranking for user *u*.
-#
-# This metric captures the **average per-item utility loss over all users**, reflecting how much the re-ranking procedure deviates from the base model in terms of utility.
-#
+    subprocess.run(base_command, check=True)
+else:
+    print(" ".join(base_command))
 
 # In[ ]:
-# evaluation results of the base model
-print_evaluation_results(base_model_name, dataset_name, title=f"{base_model_name} in-processing {f'({inprocessing_model_name})' if config_base['fair-rank'] else ''}")
-
+inproc_command = [
+    "python",
+    "main.py",
+    "--task", "recommendation",
+    "--stage", "in-processing",
+    "--dataset", dataset_name,
+    "--train_config_file", config_inproc_file.name
+]
+if use_subprocess:
+    subprocess.run(inproc_command, check=True)
+else:
+    print(" ".join(inproc_command))
 
 # In[ ]:
-# evaluation results of post-processing model
-print_evaluation_results(postprocessing_model_name, dataset_name, title=f"{base_model_name} Post-processing {f'({postprocessing_model_name})' if config_model['fair-rank'] else ''}")
+postproc_command = [
+    "python",
+    "main.py",
+    "--task", "recommendation",
+    "--stage", "post-processing",
+    "--dataset", dataset_name,
+    "--train_config_file", config_postproc_file.name
+]
+if use_subprocess:
+    subprocess.run(postproc_command, check=True)
+else:
+    print(" ".join(postproc_command))
+
+#
+# In[ ]:
+# Create write file
+model_path = Path(f"results/")
+model_path.mkdir(parents=True, exist_ok=True)
+with open(f"{model_path}/{base_model_name}_{dataset_name}.txt", "w") as file_handle:
+    # evaluation results of the base model
+    print_evaluation_results(config_base['log_name'], dataset_name, f"{base_model_name} base", file_handle)
+
+    # evaluation results of in-processing model
+    print_evaluation_results(config_inproc['log_name'], dataset_name, f"{base_model_name} in-processing ({inprocessing_model_name})", file_handle)
+
+    # evaluation results of post-processing model
+    print_evaluation_results(config_postproc['log_name'], dataset_name, f"{base_model_name} post-processing({postprocessing_model_name})", file_handle)
+
+
 
 
 # #### ✅ CP-Fair improves fairness and diversity metrics over the base model SASRec, with only a small drop in NDCG and utility loss.
