@@ -22,16 +22,18 @@ def forward(self, user_dict, item_id=None, all_sequence_output=False):
 
 
 def full_predict(self, user_dict, items):
-    user_embeds = self.add_position_embedding(user_dict['history_ids']).mean(dim=1)
+    user_embeds = self.forward(user_dict, items)[:, -1, :]
     item_embeds = self.item_embeddings(items)
     scores = (user_embeds * item_embeds)
     scores = scores.sum(dim=-1)  # [B, H]
     return nn.Sigmoid()(scores)
 
 
-def BSARec(config):
+def BSARec(config, fn_overwrite=True):
     config['no_cuda'] = config.get('no_cuda', False)
     config['gpu_id'] = config.get('gpu_id', '0')
+
+    config['item_size'] = config.get('item_size', 438)
 
     config['max_seq_length'] = config.get('max_seq_length', 50)
     config['hidden_size'] = config.get('hidden_size', 64)
@@ -58,8 +60,10 @@ def BSARec(config):
     model.IR_type = ["retrieval", "ranking"]
 
     # bind the methods to the model instance
-    model.compute_loss = compute_loss.__get__(model, BSARecModel)
-    model.full_predict = full_predict.__get__(model, BSARecModel)
-    model.forward = forward.__get__(model, BSARecModel)
+    if fn_overwrite:
+        print("Overwriting methods for BSARecModel")
+        model.compute_loss = compute_loss.__get__(model, BSARecModel)
+        model.full_predict = full_predict.__get__(model, BSARecModel)
+        model.forward = forward.__get__(model, BSARecModel)
 
     return model
