@@ -469,7 +469,6 @@ with open(f"{model_path}/{base_model_name}_{dataset_name}_{inprocessing_model_na
 # #### ✅ CP-Fair improves fairness and diversity metrics over the base model SASRec, with only a small drop in NDCG and utility loss.
 
 # %%
-from recommendation.base_model.bsarec import BSARec
 import math
 def recall_at_k(actual, predicted, topk):
     sum_recall = 0.0
@@ -488,6 +487,7 @@ def ndcg_k(actual, predicted, topk):
     for user_id in range(len(actual)):
         k = min(topk, len([actual[user_id]]))
         idcg = idcg_k(k)
+        print(user_id, actual[user_id], predicted[user_id], k, idcg)
         dcg_k = sum([int(predicted[user_id][j] in
                          set([actual[user_id]])) / math.log(j+2, 2) for j in range(topk)])
         res += dcg_k / idcg
@@ -502,23 +502,25 @@ def idcg_k(k):
         return res
 
 def get_full_sort_score(epoch, answers, pred_list, topk):
-        recall, ndcg = [], []
-        for k in topk:
-            recall.append(recall_at_k(answers, pred_list, k))
-            ndcg.append(ndcg_k(answers, pred_list, k))
+    recall, ndcg = [], []
+    print("answers", answers.shape, "pred_list", pred_list.shape, "topk", topk)
+    for k in topk:
+        recall.append(recall_at_k(answers, pred_list, k))
+        ndcg.append(ndcg_k(answers, pred_list, k))
 
-        print(recall, ndcg)
-        post_fix = {
-            "Epoch": epoch,
-            "HR@5": '{:.4f}'.format(recall[0]), "NDCG@5": '{:.4f}'.format(ndcg[0]),
-            "HR@10": '{:.4f}'.format(recall[1]), "NDCG@10": '{:.4f}'.format(ndcg[1]),
-            "HR@20": '{:.4f}'.format(recall[3]), "NDCG@20": '{:.4f}'.format(ndcg[3])
-        }
+    print(recall, ndcg)
+    post_fix = {
+        "Epoch": epoch,
+        "HR@5": '{:.4f}'.format(recall[0]), "NDCG@5": '{:.4f}'.format(ndcg[0]),
+        "HR@10": '{:.4f}'.format(recall[1]), "NDCG@10": '{:.4f}'.format(ndcg[1]),
+        "HR@20": '{:.4f}'.format(recall[3]), "NDCG@20": '{:.4f}'.format(ndcg[3])
+    }
 
-        return [recall[0], ndcg[0], recall[1], ndcg[1], recall[3], ndcg[3]], str(post_fix)
+    return [recall[0], ndcg[0], recall[1], ndcg[1], recall[3], ndcg[3]], str(post_fix)
 
 
 # %%
+from recommendation.base_model.bsarec import BSARec
 def test_model(config: dict):
     log_file = get_log_dir(config_base['log_name'], dataset_name)
     test_dataset = torch.load(os.path.join(log_file, 'test_dataset.pt'))
@@ -534,49 +536,85 @@ def test_model(config: dict):
             answer_list = None
 
             for b in range(batch_size):
+                h = history_behavior[b].unsqueeze(0).to(config['device'])
                 """
                 See BSARec/src/trainers.py for the details of what happens below
                 """
-                h = history_behavior[b].unsqueeze(0).to(config['device'])
 
-                # Predict
-                recommend_output = model.predict(h, user_ids)
+                # # Predict
+                # recommend_output = model.predict(h, None)
+                # recommend_output = recommend_output[:, -1, :]# 推荐的结果
+                # answers = items[b].cpu().data.numpy().copy()
+
+                # # Full Predict
+                # test_item_emb = model.item_embeddings.weight
+                # # [batch hidden_size ]
+                # rating_pred = torch.matmul(recommend_output, test_item_emb.transpose(0, 1))
+                # rating_pred = rating_pred.cpu().data.numpy().copy()
+                # print(recommend_output.shape, items[b].shape, pos_length[b])
+
+                # # reference: https://stackoverflow.com/a/23734295, https://stackoverflow.com/a/20104162
+                # # argpartition time complexity O(n)  argsort O(nlogn)
+                # # The minus sign "-" indicates a larger value.
+                # ind = np.argpartition(rating_pred, -20)[:, -20:]
+                # print("ind", ind.shape)
+                # # Take the corresponding values from the corresponding dimension
+                # # according to the returned subscript to get the sub-table of each row of topk
+                # arr_ind = rating_pred[np.arange(len(rating_pred))[:, None], ind]
+                # print("arr_ind", arr_ind.shape)
+                # # Sort the sub-tables in order of magnitude.
+                # arr_ind_argsort = np.argsort(arr_ind)[np.arange(len(rating_pred)), ::-1]
+                # print("arr_ind_argsort", arr_ind_argsort.shape)
+                # # retrieve the original subscript from index again
+                # batch_pred_list = ind[np.arange(len(rating_pred))[:, None], arr_ind_argsort]
+                # print("batch_pred_list", batch_pred_list.shape)
+
+
+                rating_pred = model.full_predict(h, items[b].to(config['device'])).cpu().data.numpy().copy()
+                print("rating_pred1", rating_pred.shape)
+                recommend_output = model.predict(h, None)
                 recommend_output = recommend_output[:, -1, :]# 推荐的结果
+                print("recommend_output", recommend_output.shape)
 
-                # Full Predict
+                # [item_num hidden_size]
                 test_item_emb = model.item_embeddings.weight
+                # Clip to num items in the dataset
+                test_item_emb = test_item_emb[:350]
+                print("test_item_emb", test_item_emb.shape)
                 # [batch hidden_size ]
+                # import pdb; pdb.set_trace()
                 rating_pred = torch.matmul(recommend_output, test_item_emb.transpose(0, 1))
                 rating_pred = rating_pred.cpu().data.numpy().copy()
+                print("rating_pred2", rating_pred.shape)
 
-                # reference: https://stackoverflow.com/a/23734295, https://stackoverflow.com/a/20104162
-                # argpartition time complexity O(n)  argsort O(nlogn)
-                # The minus sign "-" indicates a larger value.
-                ind = np.argpartition(rating_pred, -20)[:, -20:]
-                # Take the corresponding values from the corresponding dimension
-                # according to the returned subscript to get the sub-table of each row of topk
-                arr_ind = rating_pred[np.arange(len(rating_pred))[:, None], ind]
-                # Sort the sub-tables in order of magnitude.
-                arr_ind_argsort = np.argsort(arr_ind)[np.arange(len(rating_pred)), ::-1]
-                # retrieve the original subscript from index again
-                batch_pred_list = ind[np.arange(len(rating_pred))[:, None], arr_ind_argsort]
+                answers = [1] * pos_length[b] + [0] * (sample_size - pos_length[b])
+                answers = np.array(answers)
+                print(answers.shape, rating_pred.shape)
+                ranked_args = np.argsort(rating_pred)[::-1]
+                batch_pred_list = answers[ranked_args]
+                print("ranked_args", ranked_args.shape)
 
-                answers = torch.tensor([1] * pos_length[b] + [0] * (sample_size - pos_length[b])).cpu()
                 if b == 0:
                     pred_list = batch_pred_list
-                    answer_list = items[b].cpu().data.numpy()
+                    answer_list = answers
                 else:
                     pred_list = np.append(pred_list, batch_pred_list, axis=0)
-                    answer_list = np.append(answer_list, items[b].cpu().data.numpy(), axis=0)
+                    answer_list = np.append(answer_list, answers, axis=0)
 
-            print(items.shape, pred_list.shape, answer_list.shape, batch_size)
-            scores, result_info = get_full_sort_score(0, items, pred_list, config['topk'])
+
+
+            print(items.shape, answer_list.shape, pred_list.shape, batch_size)
+                # print: torch.Size([17, 350]) (17, 20) (5950,) 17
+            # reshape answer_list to be (batch_size, sample_size)
+            # print(user_ids, answer_list, pred_list, len(user_ids))
+
+            scores, result_info = get_full_sort_score(0, answer_list, pred_list, config['topk'])
             print(f"Scores: {scores}")
             print(f"Result Info: {result_info}")
 
     # Given the metrics above calculate the HR and NDCG
 
 test_model(config_base)
-
+# (1090,) (1090, 20)
 
 # %%
