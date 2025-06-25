@@ -3,6 +3,7 @@ from .bsarec import BSARecModel
 
 
 def compute_loss(self, interaction):
+    # print(f"Interaction shape: {interaction['history_ids'].shape}, Item IDs shape: {interaction['item_ids'].shape}")
     return self.calculate_loss(interaction, interaction['item_ids'], None, None, None)
 
 
@@ -33,7 +34,7 @@ def BSARec(config, fn_overwrite=True):
     config['no_cuda'] = config.get('no_cuda', False)
     config['gpu_id'] = config.get('gpu_id', '0')
 
-    config['item_size'] = config.get('item_size', 438)
+    config['item_size'] = config.get('item_size', 393)
 
     config['max_seq_length'] = config.get('max_seq_length', 50)
     config['hidden_size'] = config.get('hidden_size', 64)
@@ -60,10 +61,12 @@ def BSARec(config, fn_overwrite=True):
     model.IR_type = ["retrieval", "ranking"]
 
     # bind the methods to the model instance
+    model.compute_loss = compute_loss.__get__(model, BSARecModel)
+    model.full_predict = full_predict.__get__(model, BSARecModel)
+
+    # Overwritten methods
     if fn_overwrite:
         print("Overwriting methods for BSARecModel")
-        model.compute_loss = compute_loss.__get__(model, BSARecModel)
-        model.full_predict = full_predict.__get__(model, BSARecModel)
         model.forward = forward.__get__(model, BSARecModel)
 
     return model
