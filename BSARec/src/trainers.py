@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import tqdm
 import torch
 import numpy as np
@@ -120,6 +122,8 @@ class Trainer:
             pred_list = None
             answer_list = None
 
+            rating_preds_list = []
+
             for i, batch in rec_data_iter:
                 batch = tuple(t.to(self.device) for t in batch)
                 user_ids, input_ids, answers, _, _ = batch
@@ -135,6 +139,8 @@ class Trainer:
                 except: # bert4rec
                     rating_pred = rating_pred[:, :-1]
                     rating_pred[self.args.train_matrix[batch_user_index].toarray() > 0] = 0
+
+                rating_preds_list.extend(list(rating_pred))
 
                 # reference: https://stackoverflow.com/a/23734295, https://stackoverflow.com/a/20104162
                 # argpartition time complexity O(n)  argsort O(nlogn)
@@ -154,6 +160,12 @@ class Trainer:
                 else:
                     pred_list = np.append(pred_list, batch_pred_list, axis=0)
                     answer_list = np.append(answer_list, answers.cpu().data.numpy(), axis=0)
+
+            ratings_array = np.array(rating_preds_list)
+            ratings_dir = Path(self.args.output_dir, "ratings")
+            ratings_dir.mkdir(exist_ok=True)
+            ratings_file = ratings_dir / f"{self.args.model_type}_{self.args.data_name}_ratings.npy"
+            np.save(ratings_file, ratings_array)
 
             scores, result_info = self.get_full_sort_score(epoch, answer_list, pred_list)
             return scores, result_info, pred_list

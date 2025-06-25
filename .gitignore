@@ -180,6 +180,7 @@ cython_debug/
 # Raw datasets
 **/data/raw
 !**/output/*.log
+!**/output/ratings/*
 
 !**/output/BERT4Rec/*.log
 !**/output/SASRec/*.log
