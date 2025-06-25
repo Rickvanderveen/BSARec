@@ -371,9 +371,17 @@ class RecTrainer(object):
         with open(os.path.join(log_dir, "config.yaml"), 'w') as f:
             yaml.dump(config, f)
 
+        # Save the data in the test_loader to a file such that it can be loaded later
+        print(f"Saving test dataset in {os.path.join(log_dir, 'test_dataset.pt')}")
+        dataset = []
+        for test_data in test_loader:
+            dataset.append(test_data)
+        torch.save(dataset, os.path.join(log_dir, "test_dataset.pt"))
+
         print("start to testing...")
         self.Model.load_state_dict(torch.load(os.path.join(log_dir, "best_model.pth")))  # load state_dict
         self.Model.eval()  # change to eval model
+
         if config['store_scores'] == False:
             test_result = evaluator.eval(test_loader, self.Model)
         else:
