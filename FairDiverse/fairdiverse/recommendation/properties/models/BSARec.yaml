@@ -9,5 +9,4 @@
     initializer_range: 0.02,         # (float) The standard deviation for normal initialization.
     num_items: 10,
     num_users: 10,
-    item_size: 438,
 }
