@@ -50,6 +50,10 @@ def get_log_dir(model_name, dataset_name=""):
 def print_evaluation_results(model_name, dataset_name, title, file_handle):
     evaluation_file = os.path.join(get_log_dir(model_name, dataset_name), "test_result.json")
 
+    if not os.path.exists(evaluation_file):
+        print(f"Evaluation file {evaluation_file} does not exist. Skipping printing results.")
+        return
+
     with open(evaluation_file, "r", encoding="utf-8") as f:
         metrics = json.load(f)
     # format metrics as table for visualisation
@@ -446,18 +450,18 @@ else:
     print(" ".join(postproc_command))
 
 # In[ ]:
-# # Create write file
-# model_path = Path(f"results/")
-# model_path.mkdir(parents=True, exist_ok=True)
-# with open(f"{model_path}/{base_model_name}_{dataset_name}_{inprocessing_model_name}_{postprocessing_model_name}.txt", "w") as file_handle:
-#     # evaluation results of the base model
-#     print_evaluation_results(config_base['log_name'], dataset_name, f"{base_model_name} base", file_handle)
+# Create write file
+model_path = Path(f"results/")
+model_path.mkdir(parents=True, exist_ok=True)
+with open(f"{model_path}/{base_model_name}_{dataset_name}_{inprocessing_model_name}_{postprocessing_model_name}.txt", "w") as file_handle:
+    # evaluation results of the base model
+    print_evaluation_results(config_base['log_name'], dataset_name, f"{base_model_name} base", file_handle)
 
-#     # evaluation results of in-processing model
-#     print_evaluation_results(config_inproc['log_name'], dataset_name, f"{base_model_name} in-processing ({inprocessing_model_name})", file_handle)
+    # evaluation results of in-processing model
+    print_evaluation_results(config_inproc['log_name'], dataset_name, f"{base_model_name} in-processing ({inprocessing_model_name})", file_handle)
 
-#     # evaluation results of post-processing model
-#     print_evaluation_results(config_postproc['log_name'], dataset_name, f"{base_model_name} post-processing ({postprocessing_model_name})", file_handle)
+    # evaluation results of post-processing model
+    print_evaluation_results(config_postproc['log_name'], dataset_name, f"{base_model_name} post-processing ({postprocessing_model_name})", file_handle)
 
 
 
