@@ -2,10 +2,39 @@ from pathlib import Path
 
 import tqdm
 import torch
+import torch.nn.functional as F
 import numpy as np
 
 from torch.optim import Adam
 from metrics import recall_at_k, ndcg_k
+from dataset import DataMaps
+from utils import load_category_map
+
+FOCF_MULTIPLIER = 2
+def focf_regularizer(scores: torch.Tensor):
+    assert scores.shape[1] == 2, "This FOCF regularizer only works with 2 categories"
+    gaps = torch.abs(scores[:, 0] - scores[:, 1])
+    loss = F.smooth_l1_loss(gaps, torch.zeros_like(gaps), reduction="mean")
+    return loss
+
+def compute_group_scores(scores, data_maps: DataMaps, category_map: dict[str, str]):
+    categories = sorted(set(category_map.values()))
+    category_score = torch.zeros((len(scores), len(categories)))
+
+    category_filter = torch.zeros((len(data_maps._id2item.keys())))
+    for idx, (id, item_id) in enumerate(data_maps._id2item.items()):
+        category = category_map[str(item_id)]
+        category_filter[idx] = categories.index(category)
+
+    for user_idx, user_item_scores in enumerate(scores):
+        for category_idx, category in enumerate(categories):
+            category_items = user_item_scores[category_filter == category_idx]
+            category_score[user_idx, category_idx] += torch.sum(category_items)
+
+    category_score = category_score / torch.sum(category_score, axis=1, keepdim=True)
+
+    return category_score
+
 
 class Trainer:
     def __init__(self, model, train_dataloader, eval_dataloader, test_dataloader, args, logger):
@@ -15,7 +44,7 @@ class Trainer:
         self.logger = logger
         self.cuda_condition = torch.cuda.is_available() and not self.args.no_cuda
         self.device = torch.device("cuda" if self.cuda_condition else "cpu")
-
+ 
         self.model = model
         if self.cuda_condition:
             self.model.cuda()
@@ -24,6 +53,12 @@ class Trainer:
         self.train_dataloader = train_dataloader
         self.eval_dataloader = eval_dataloader
         self.test_dataloader = test_dataloader
+
+
+        # Load the datamaps which contain the id2user, user2id, id2item, item2id
+        if self.args.fairness_reg:
+            self.data_maps = DataMaps.read_json(args.data_maps_path)
+            self.category_map = load_category_map(args.category_map_path)
 
         # self.data_name = self.args.data_name
         betas = (self.args.adam_beta1, self.args.adam_beta2)
@@ -103,7 +138,20 @@ class Trainer:
 
                 user_ids, input_ids, answers, neg_answer, same_target = batch
                 loss = self.model.calculate_loss(input_ids, answers, neg_answer, same_target, user_ids)
-                    
+
+                if self.args.fairness_reg:
+                    recommend_output = self.model.predict(input_ids, user_ids)
+                    recommend_output = recommend_output[:, -1, :]
+
+                    rating_pred = self.predict_full(recommend_output)
+                    rating_pred = rating_pred.cpu().data.numpy().copy()
+                    batch_user_index = user_ids.cpu().numpy()
+
+                    scores = torch.sigmoid(torch.from_numpy(rating_pred))[:, :-1]
+                    group_scores = compute_group_scores(scores, self.data_maps, self.category_map)
+                    fairness_loss = focf_regularizer(group_scores)
+                    loss += FOCF_MULTIPLIER * fairness_loss
+
                 self.optim.zero_grad()
                 loss.backward()
                 self.optim.step()
@@ -161,11 +209,12 @@ class Trainer:
                     pred_list = np.append(pred_list, batch_pred_list, axis=0)
                     answer_list = np.append(answer_list, answers.cpu().data.numpy(), axis=0)
 
-            ratings_array = np.array(rating_preds_list)
-            ratings_dir = Path(self.args.output_dir, "ratings")
-            ratings_dir.mkdir(exist_ok=True)
-            ratings_file = ratings_dir / f"{self.args.model_type}_{self.args.data_name}_ratings.npy"
-            np.save(ratings_file, ratings_array)
+            if self.args.do_eval:
+                ratings_array = np.array(rating_preds_list)
+                ratings_dir = Path(self.args.output_dir, "ratings")
+                ratings_dir.mkdir(exist_ok=True)
+                ratings_file = ratings_dir / f"{self.args.load_model}_ratings.npy"
+                np.save(ratings_file, ratings_array)
 
             scores, result_info = self.get_full_sort_score(epoch, answer_list, pred_list)
             return scores, result_info, pred_list

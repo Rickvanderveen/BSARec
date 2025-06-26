@@ -6,6 +6,7 @@ import datetime
 import argparse
 import numpy as np
 import logging
+import json
 
 def set_logger(log_path, log_name='seqrec', mode='a'):
     """set up log file
@@ -90,6 +91,10 @@ def parse_args():
     parser.add_argument("--attention_probs_dropout_prob", default=0.5, type=float)
     parser.add_argument("--hidden_dropout_prob", default=0.5, type=float)
     parser.add_argument("--initializer_range", default=0.02, type=float)
+
+    parser.add_argument("--fairness_reg", action="store_true")
+    parser.add_argument("--data_maps_path", default=None, type=Path)
+    parser.add_argument("--category_map_path", default=None, type=Path)
 
     args, _ = parser.parse_known_args()
 
@@ -192,3 +197,13 @@ def read_last_line_from_file(path: Path):
 def read_first_line_from_file(path: Path):
     with path.open("r") as f:
         return f.readline()
+
+
+def load_category_map(path: Path):
+    """Load a category map from a path.
+
+    Returns a dict with the mapping from item2category. Can be single and multiple categories.
+    """
+    with path.open("r", newline="", encoding="utf-8") as file:
+        return json.load(file)
+
