@@ -31,7 +31,7 @@
 | NDCG@10  | 0.0355 |  0.0252  | 0.0361 | 0.0354  | 0.0435   |
 | NDCG@20  | 0.0429 |  0.0286  | 0.0446 | 0.0414  | 0.0526   |
 
-Average Entropy for Top-6 recommendations: 1.2449553407956822
+Average Entropy for Top-6 recommendations: MISSING
 
 ## 🧑‍💻 Team Members
 - Emo Maat – emo.maat@student.uva.nl  
