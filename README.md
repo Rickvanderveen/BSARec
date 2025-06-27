@@ -24,7 +24,7 @@
 
 | LastFM   | SASRec | BERT4Rec | DuoRec |FEARec   | BSARec   |
 |----------|--------|----------|--------|---------|----------|
-| HR@5     | 0.0413 |  0.0294  | 0.0431 | 0.0431  | 0.0523   | 
+| HR@5     | 0.0413 |  0.0294  | 0.0431 | 0.0431  | 0.0523   |
 | HR@10    | 0.0633 |  0.0459  | 0.0624 | 0.0587  | 0.0807   |
 | HR@20    | 0.0927 |  0.0596  | 0.0963 | 0.0826  | 0.1174   |
 | NDCG@5   | 0.0284 |  0.0198  | 0.0300 | 0.0304  | 0.0344   |
@@ -34,10 +34,10 @@
 Average Entropy for Top-6 recommendations: MISSING
 
 ## 🧑‍💻 Team Members
-- Emo Maat – emo.maat@student.uva.nl  
+- Emo Maat – emo.maat@student.uva.nl
 - Fiona Nagelhout – fiona.nagelhout@student.uva.nl
 - Akshay Sardjoe Misser – akshay.sardjoe.missier@student.uva.nl
-- Rick van der Veen - rick.van.der.veen@student.uva.nl  
+- Rick van der Veen - rick.van.der.veen@student.uva.nl
 
 ## 👥 Supervising TAs
 - Yuanna Liu (Main Supervisor)
@@ -53,7 +53,7 @@ Transformer-based sequential recommendation systems have revolutionized the fiel
 ## 📊 Summary of Results
 
 
-### Reproducability 
+### Reproducibility
 
 In this work, we aimed to verify the results of BSARec as reported by the authors, which claim that BSARec outperforms all other SotA models. This verification is done by running the model on an already tested and an unkown dataset, the LastFM and Diginetica dataset respectively. Using metrics such as the Hit Rate and Normalized Discounted Cumulative Gain, we find that the reported performance matches ours.
 
@@ -61,7 +61,7 @@ In this work, we aimed to verify the results of BSARec as reported by the author
 
 Furthermore, we explore the fairness and diversity of the recommendations proposed by BSARec, comparing them to the same models subjected to by the authors, and find that BSARec also recommends more fair and diverse items compared to other models.
 
-Finally, we extend BSARec with in- and post-processing methods, to check whether we can improve the fairness and diverseness of BSARec even further. Using FOCF and CPFair processing methods, we show that BSARec's performance can be improved, but to which degree is dependent on the end goal. 
+Finally, we extend BSARec with in- and post-processing methods, to check whether we can improve the fairness and diverseness of BSARec even further. Using FOCF and CPFair processing methods, we show that BSARec's performance can be improved, but to which degree is dependent on the end goal.
 
 ---
 
@@ -70,36 +70,29 @@ _Define the recommendation task you are solving (e.g., sequential, generative, c
 ---
 
 ## 📂 Datasets
+| Dataset | # Users | # Items | # Interactions | Avg. Length | Entropy |
+|---------|---------|---------|----------------|-------------|---------|
+| [LastFM](https://grouplens.org/datasets/hetrec-2011/) | 1,090 | 3,646 | 52,551 | 48.2 | 7.829 |
+| [Diginetica](https://github.com/RecoHut-Datasets/diginetica) | 14,828 | 9,440 | 119,918 | 8.1 | 8.849 |
 
-_Provide the following for all datasets, including the attributes you are considering to measure things like item fairness (for example)_:
-
-- [ ] [Dataset Name](Link-to-dataset-DOI-or-URL)
-  - [ ] Pre-processing: e.g., Removed items with fewer than 5 interactions, and users with fewer than 5 interactions
-  - [ ] Subsets considered: e.g., Cold Start (5-10 items)
-  - [ ] Dataset size: # users, # items, sparsity:
-  - [ ] Attributes for user fairness (only include if used):
-  - [ ] Attributes for item fairness (only include if used):
-  - [ ] Attributes for group fairness (only include if used):
-  - [ ] Other attributes (only include if used):
-
----
 
 ## 📏 Metrics
-
-_Explain why these metrics are appropriate for your recommendation task and what they are measuring briefly._
-
-- [ ] Metric #1
-  - [ ] Description:
-
-
+|Metric | Description |
+|-----|-------------|
+| Hit Rate (HR) | measures if each recommendation has at least one item that corresponds to the ground truth in the top-k recommended items|
+| Normalized Discounted Cumulative Gain (NDCG) | measures the ranking quality of the recommended items, considering both relevance and position in the recommendation list | A position-aware metric which takes into account the relevance for each item|
+| Entropy | Entropy of the category distribution in the recommendation|
 ---
 
 ## 🔬 Baselines & Methods
 
 _Describe each baseline, primary methods, and how they are implemented. Mention tools/frameworks used (e.g., Surprise, LightFM, RecBole, PyTorch)._
 Describe each baseline
-- [ ] [Baseline 1](Link-to-reference)
-- [ ] [Baseline 2](Link-to-reference)
+- [SASRec](https://arxiv.org/abs/1808.09781): A self-attention based sequential recommendation model.
+- [BERT4Rec](https://arxiv.org/abs/1904.06690): A BERT-based sequential recommendation model that uses masked language modeling.
+- [DuoRec](https://arxiv.org/abs/2110.05730): A dual encoder model that combines user and item representations for sequential recommendation.
+- [FEARec](https://arxiv.org/abs/2304.09184): A frequency-aware sequential recommendation model that incorporates frequency information in user histories.
+- [BSARec](https://arxiv.org/abs/2312.10325): A sequential recommendation model that uses an attentive inductive bias to mitigate oversmoothing problems in self-attention.
 
 
 
@@ -107,10 +100,16 @@ Describe each baseline
 
 _Explain your approach in simple terms. Describe your model pipeline: data input → embedding/representation → prediction → ranking. Discuss design choices, such as use of embeddings, neural networks, or attention mechanisms._
 
----
+The pipeline of the method in this repo is as follows:
+1. **Data Input**: The model takes user-item interaction data as input, where each
+2. **Embedding/Representation**: The model uses an embedding layer to convert user and item IDs into dense vectors.
+3. **Prediction**: The model uses a self-attention mechanism and fast fourrier transform to capture the sequential patterns
+4. **Ranking**: The model ranks the items based on their predicted scores, which are computed using a linear layer on the output of the self-attention mechanism.
+
+### Extension locations
+- **FOCF**: This is implemented in the in-processing and training fase of the model, where an additional fair-aware regularization loss is added to the training objective.
+- **CPFair**: This is implemented in the post-processing phase, where the model's output is processed to yield a fair ranking of items.
+
 
 ## 🌱 Proposed Extensions
-
-The current implementation of BSARec suffers from a limitation where new items cannot be added to the model once it is trained. This can be problematic for production as changes in an inventory cannot be accounted for. Additionally, this research does not evaluate a mixture of in- and post-processing methods, which cloud combine their relative strengths to further improve fairness and diversity. Looking towards the future, extensive testing on more datasets and processing methods is required to further solidify our results.
-
-
+To create fairer sequential recommendations with BSARec, the model is subjected to two types of fairness algorithms. The first is FOCF, which is an in-processing method and acts as an additional fair-aware regularization loss during training. The second algorithm is CPFair and is a post-processing method, which is applied after the model produces its output, yielding a greedy solution to the problem of fair ranking.
