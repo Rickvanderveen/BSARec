@@ -90,7 +90,8 @@ Finally, we extend BSARec with in- and post-processing methods, to check whether
 ---
 
 ## 🛠️ Task Definition
-_Define the recommendation task you are solving (e.g., sequential, generative, content-based, collaborative, ranking, etc.). Clearly describe inputs and outputs._
+The task is sequential recommendation, where the input is a history of items of a user. These items can be previous purchases from a webshop or previously listened-to songs. For the model input, all items are processed to item ids. Based on the history of item ids, the next item is predicted. This is in the form of a top-$k$ recommendation. The model predicts the relevance of all unique items in the dataset and the recommendations are the $k$ items with the highest predicted relevance.
+
 ---
 
 ## 📂 Datasets
@@ -105,7 +106,11 @@ _Define the recommendation task you are solving (e.g., sequential, generative, c
 |-----|-------------|
 | Hit Rate (HR) | measures if each recommendation has at least one item that corresponds to the ground truth in the top-k recommended items|
 | Normalized Discounted Cumulative Gain (NDCG) | measures the ranking quality of the recommended items, considering both relevance and position in the recommendation list | A position-aware metric which takes into account the relevance for each item|
-| Entropy | Entropy of the category distribution in the recommendation|
+| Demographic parity (DP) | Measures the difference in exposure between two groups |
+| Exposed Utility Ratio (EUR) | Measure of the exposure given to each group that is proportional to the utility they contribute |
+| Realized Utility Ratio (RUR) | Measures whether the discounted utility that is contributed by each group is proportional to the total utility contributed  |
+| Entropy | Entropy of the category distribution in the recommendation |
+
 ---
 
 ## 🔬 Baselines & Methods
@@ -126,7 +131,7 @@ _Explain your approach in simple terms. Describe your model pipeline: data input
 
 The pipeline of the method in this repo is as follows:
 1. **Data Input**: The model takes user-item interaction data as input, where each
-2. **Embedding/Representation**: The model uses an embedding layer to convert user and item IDs into dense vectors.
+2. **Embedding/Representation**: The model uses an embedding layer to convert item IDs into dense vectors.
 3. **Prediction**: The model uses a self-attention mechanism and fast fourrier transform to capture the sequential patterns
 4. **Ranking**: The model ranks the items based on their predicted scores, which are computed using a linear layer on the output of the self-attention mechanism.
 
