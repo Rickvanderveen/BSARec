@@ -63,3 +63,5 @@ To use the fairness loss during training 1 flag and 2 extra arguments needs to b
 2. `--data_maps_path` which expects the path to the data maps e.g. `data/category_maps/LastFM/artist_popularity_mapping.json`
 3. `--category_map_path` which expects the path of the category path e.g. `data/self_processed/data_maps/LastFM_maps.json`
 
+## Diversity
+The diversity can be computer from the model predictions, category map and data map. These are all combined and used in the `fairness_and_diversity.ipynb`.
