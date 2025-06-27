@@ -22,21 +22,22 @@
 - artist_category_mapping.dat: Each artist id can have multiple genres/categories out of which we choose the majority one; artist_category is the final genre assigned to this artist.
 ## Results
 
-| LastFM   | FEARec   | BSARec   |
-|----------|----------|----------|
-| HR@5     | 0.0303   | 0.0495   |
-| HR@10    | 0.0413   | 0.0761   |
-| HR@20    | 0.0615   | 0.1055   |
-| NDCG@5   | 0.0204   | 0.0334   |
-| NDCG@10  | 0.0241   | 0.0419   |
-| NDCG@20  | 0.0291   | 0.0491   |
+| LastFM   | SASRec | BERT4Rec | DuoRec |FEARec   | BSARec   |
+|----------|--------|----------|--------|---------|----------|
+| HR@5     | 0.0413 |  0.0294  | 0.0431 | 0.0431  | 0.0523   | 
+| HR@10    | 0.0633 |  0.0459  | 0.0624 | 0.0587  | 0.0807   |
+| HR@20    | 0.0927 |  0.0596  | 0.0963 | 0.0826  | 0.1174   |
+| NDCG@5   | 0.0284 |  0.0198  | 0.0300 | 0.0304  | 0.0344   |
+| NDCG@10  | 0.0355 |  0.0252  | 0.0361 | 0.0354  | 0.0435   |
+| NDCG@20  | 0.0429 |  0.0286  | 0.0446 | 0.0414  | 0.0526   |
 
 Average Entropy for Top-6 recommendations: 1.2449553407956822
 
 ## 🧑‍💻 Team Members
-- Name 1 – email@example.com  
-- Name 2 – email@example.com  
-- Name 3 – email@example.com  
+- Emo Maat – emo.maat@student.uva.nl  
+- Fiona Nagelhout – fiona.nagelhout@student.uva.nl
+- Akshay Sardjoe Misser – akshay.sardjoe.missier@student.uva.nl
+- Rick van der Veen - rick.van.der.veen@student.uva.nl  
 
 ## 👥 Supervising TAs
 - Yuanna Liu (Main Supervisor)
@@ -46,8 +47,7 @@ Average Entropy for Top-6 recommendations: 1.2449553407956822
 ---
 
 ## 🧾 Project Abstract
-_Provide a concise summary of your project, including the type of recommender system you're building, the key techniques used, and a brief two sentence summary of results._
-
+Transformer-based sequential recommendation systems have revolutionized the field, however models that are agnostic to frequency information in user histories suffer from oversmoothing problems inherent to self-attention. While BSARec claims to mitigate this limitation, its evaluations is predominantly focused on accuracy. This study firstly examines the reproducibility of the authors' claims. Secondly, the evaluation is broadened by assessing model performance on various fairness and diversity metrics and thirdly, further enhances the model by incorporating fairness-aware optimizations.
 ---
 
 ## 📊 Summary of Results
@@ -55,17 +55,18 @@ _Provide a concise summary of your project, including the type of recommender sy
 
 ### Reproducability 
 
-_Summarize your key reproducability findings in bullet points._
+In this work, we aimed to verify the results of BSARec as reported by the authors, which claim that BSARec outperforms all other SotA models. This verification is done by running the model on an already tested and an unkown dataset, the LastFM and Diginetica dataset respectively. Using metrics such as the Hit Rate and Normalized Discounted Cumulative Gain, we find that the reported performance matches ours.
 
 ### Extensions
 
-_Summarize your key findings about the extensions you implemented in bullet points._
+Furthermore, we explore the fairness and diversity of the recommendations proposed by BSARec, comparing them to the same models subjected to by the authors, and find that BSARec also recommends more fair and diverse items compared to other models.
+
+Finally, we extend BSARec with in- and post-processing methods, to check whether we can improve the fairness and diverseness of BSARec even further. Using FOCF and CPFair processing methods, we show that BSARec's performance can be improved, but to which degree is dependent on the end goal. 
 
 ---
 
 ## 🛠️ Task Definition
 _Define the recommendation task you are solving (e.g., sequential, generative, content-based, collaborative, ranking, etc.). Clearly describe inputs and outputs._
-
 ---
 
 ## 📂 Datasets
@@ -110,7 +111,6 @@ _Explain your approach in simple terms. Describe your model pipeline: data input
 
 ## 🌱 Proposed Extensions
 
-_List & briefly describe the extensions that you made to the original method, including extending evaluation e.g., other metrics or new datasets considered._
-
+The current implementation of BSARec suffers from a limitation where new items cannot be added to the model once it is trained. This can be problematic for production as changes in an inventory cannot be accounted for. Additionally, this research does not evaluate a mixture of in- and post-processing methods, which cloud combine their relative strengths to further improve fairness and diversity. Looking towards the future, extensive testing on more datasets and processing methods is required to further solidify our results.
 
 
