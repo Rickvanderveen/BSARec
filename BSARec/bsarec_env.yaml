@@ -12,3 +12,9 @@ dependencies:
   - pip:
     - scipy==1.11.1
     - tqdm==4.65.0
+    - matplotlib
+    - pandas
+    - ipyprogress
+    - ipykernel
+    - ipywidgets
+    - notebook
