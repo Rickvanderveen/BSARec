@@ -64,4 +64,17 @@ To use the fairness loss during training 1 flag and 2 extra arguments needs to b
 3. `--category_map_path` which expects the path of the category path e.g. `data/self_processed/data_maps/LastFM_maps.json`
 
 ## Diversity
-The diversity can be computer from the model predictions, category map and data map. These are all combined and used in the `fairness_and_diversity.ipynb`.
+The diversity can be computed from the model predictions, category map and data map. These are all combined and used in the `fairness_and_diversity.ipynb`.
+
+## Item Fairness
+To get a new model ready for testing the item-fairness (this step can be skipped if you want to run the models and baselines that are mentioned in our report), you should create a "predictions_{model_name} folder in which you place a LastFM_rel.json file (as found in the other folders) and a "LastFM_pred.json" file with the predictions. If you only have a csv file rename it to this "{model_name}_predictions.csv", put it in the new predictions folder and add the model into the list of model names in csv2sjon.py. Then in the NBR-fairness repo run:
+```bash
+python csv2json.py
+```
+And the correct json file should appear in the prediction repo. 
+
+Then, the item-fairness can be computed by running navigating into NBR-fairness/evaluation and running the following command, where model_name is the name of the model you want to test:
+
+```bash
+python model_performance.py --pred_folder ../predictions_{model_name} --method LastFM --model {model_name} 
+```
