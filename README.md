@@ -1,4 +1,4 @@
-# 📘 An Attentive Inductive Bias for Sequential Recommendation beyond the Self-Attention(BSARec)
+# 📘 An Attentive Inductive Bias for Sequential Recommendation beyond the Self-Attention (BSARec)
 
 # Description of the files:
 - BSARec_LastFM_predictions.txt: This file contains the predictions from BSARec on LastFM. Each row correponds to a user and its list of recommended artist_ids/item_ids from BSARec
@@ -21,17 +21,40 @@
 - beyond_accuracy_compute.ipynb: This notebook contains the logic to compute Entropy. Initally we need to map the predicted artists to genres and then compute top-K entropy.K is 6 in the notebook. It also contains the logic to map the artists to generes,ie- in the raw dataset, one artist can be mapped to multiple genres, but we only choose the one with the highest frequency. However, if the genre with the highest frequency is "Other", then we map the artist to the genre with the second highest frequency if present.
 - artist_category_mapping.dat: Each artist id can have multiple genres/categories out of which we choose the majority one; artist_category is the final genre assigned to this artist.
 ## Results
+### LastFM
+| Metric   | SASRec (±) | BERT4Rec (±) | DuoRec (±) | FEARec (±) | BSARec (±) |
+|----------|-------------|---------------|--------------|---------------|---------------|
+| HR@5     | 0.0394 (0.0021) | 0.0297 (0.0054) | 0.0424 (0.0021) | 0.0420 (0.0089) | 0.0499 (0.0026) |
+| HR@10    | 0.0598 (0.0023) | 0.0497 (0.0053) | 0.0580 (0.0045) | 0.0589 (0.0118) | 0.0734 (0.0043) |
+| HR@20    | 0.0886 (0.0048) | 0.0798 (0.0053) | 0.0895 (0.0058) | 0.0853 (0.0146) | 0.1077 (0.0052) |
+| NDCG@5   | 0.0268 (0.0017) | 0.0187 (0.0031) | 0.0320 (0.0007) | 0.0291 (0.0054) | 0.0339 (0.0017) |
+| NDCG@10  | 0.0334 (0.0015) | 0.0251 (0.0027) | 0.0370 (0.0009) | 0.0345 (0.0064) | 0.0414 (0.0014) |
+| NDCG@20  | 0.0406 (0.0022) | 0.0327 (0.0026) | 0.0449 (0.0011) | 0.0411 (0.0070) | 0.0500 (0.0017) |
 
-| LastFM   | SASRec | BERT4Rec | DuoRec |FEARec   | BSARec   |
-|----------|--------|----------|--------|---------|----------|
-| HR@5     | 0.0413 |  0.0294  | 0.0431 | 0.0431  | 0.0523   |
-| HR@10    | 0.0633 |  0.0459  | 0.0624 | 0.0587  | 0.0807   |
-| HR@20    | 0.0927 |  0.0596  | 0.0963 | 0.0826  | 0.1174   |
-| NDCG@5   | 0.0284 |  0.0198  | 0.0300 | 0.0304  | 0.0344   |
-| NDCG@10  | 0.0355 |  0.0252  | 0.0361 | 0.0354  | 0.0435   |
-| NDCG@20  | 0.0429 |  0.0286  | 0.0446 | 0.0414  | 0.0526   |
+### Diginetica
+| Metric   | SASRec (±) | BERT4Rec (±) | DuoRec (±) | FEARec (±) | BSARec (±) |
+|----------|-------------|---------------|--------------|---------------|---------------|
+| HR@5     | 0.1039 (0.0013) | 0.1210 (0.0010) | 0.1520 (0.0012) | 0.1535 (0.0013) | 0.1563 (0.0016) |
+| HR@10    | 0.1657 (0.0030) | 0.1902 (0.0021) | 0.2279 (0.0010) | 0.2318 (0.0017) | 0.2334 (0.0013) |
+| HR@20    | 0.2505 (0.0046) | 0.2773 (0.0014) | 0.3221 (0.0011) | 0.3271 (0.0022) | 0.3256 (0.0017) |
+| NDCG@5   | 0.0665 (0.0003) | 0.0775 (0.0009) | 0.0994 (0.0009) | 0.1006 (0.0007) | 0.1020 (0.0008) |
+| NDCG@10  | 0.0864 (0.0013) | 0.0997 (0.0012) | 0.1239 (0.0006) | 0.1257 (0.0008) | 0.1267 (0.0006) |
+| NDCG@20  | 0.1077 (0.0016) | 0.1217 (0.0009) | 0.1476 (0.0008) | 0.1498 (0.0003) | 0.1500 (0.0008) |
 
-Average Entropy for Top-6 recommendations: MISSING
+### Encouraging Fairness on LastFM
+| Metric    | BSARec  | BSARec + CPFair | BSARec + FOCF |
+|-----------|---------|------------------|----------------|
+| DP        | 1.4861  | 1.4112           | 1.5333         |
+| EUR       | 0.2436  | 0.1687           | 0.2909         |
+| RUR       | 0.7097  | 0.5330           | 0.5512         |
+| Entropy   | 0.4106  | 1.2582           | 1.2306         |
+| HR@5      | 0.0514  | 0.0514           | 0.0514         |
+| HR@10     | 0.0734  | 0.0734           | 0.0734         |
+| HR@20     | 0.1073  | 0.1110           | 0.1119         |
+| NDCG@5    | 0.0339  | 0.0337           | 0.0363         |
+| NDCG@10   | 0.0409  | 0.0407           | 0.0433         |
+| NDCG@20   | 0.0494  | 0.0501           | 0.0530         |
+
 
 ## 🧑‍💻 Team Members
 - Emo Maat – emo.maat@student.uva.nl
@@ -46,8 +69,9 @@ Average Entropy for Top-6 recommendations: MISSING
 
 ---
 
-## 🧾 Project Abstract
+## 🧾 Project Abstract 
 Transformer-based sequential recommendation systems have revolutionized the field, however models that are agnostic to frequency information in user histories suffer from oversmoothing problems inherent to self-attention. While BSARec claims to mitigate this limitation, its evaluations is predominantly focused on accuracy. This study firstly examines the reproducibility of the authors' claims. Secondly, the evaluation is broadened by assessing model performance on various fairness and diversity metrics and thirdly, further enhances the model by incorporating fairness-aware optimizations.
+
 ---
 
 ## 📊 Summary of Results
