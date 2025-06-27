@@ -13,7 +13,8 @@ def convert_csv_to_json(csv_path, json_path):
         json.dump(result, f, indent=2)
 
 # Example usage
-model = 'SASRec'
-csv_file = f'predictions_{model}/LastFM_pred.csv'
-json_file = f'predictions_{model}/LastFM_pred.json'
-convert_csv_to_json(csv_file, json_file)
+models = ["BERT4Rec", "BSARec", "DuoRec", "FEARec", "SASRec", "BSARec_CPFair", "BSARec_FOCF"]
+for model in models:
+    csv_file = f'predictions_{model}/{model}_LastFM_predictions.csv'
+    json_file = f'predictions_{model}/LastFM_pred.json'
+    convert_csv_to_json(csv_file, json_file)
